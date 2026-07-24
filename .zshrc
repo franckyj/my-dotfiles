@@ -1,3 +1,5 @@
+# check https://scottspence.com/posts/my-zsh-config
+
 # Path to your oh-my-zsh installation.
 # Reevaluate the prompt string each time it's displaying a prompt
 setopt prompt_subst
