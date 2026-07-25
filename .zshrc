@@ -24,7 +24,7 @@ export STARSHIP_CONFIG=~/.config/starship/starship.toml
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
-#export EDITOR=/opt/homebrew/bin/nvim
+export EDITOR=hx
 
 alias la=tree
 alias cat=bat
@@ -113,28 +113,10 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 
 # export PATH=/opt/homebrew/bin:$PATH
 
-# alias mat='osascript -e "tell application \"System Events\" to key code 126 using {command down}" && tmux neww "cmatrix"'
-
 # Nix!
 # export NIX_CONF_DIR=$HOME/.config/nix
-# export PATH=/run/current-system/sw/bin:$PATH
-
-# function ranger {
-#   local IFS=$'\t\n'
-#   local tempfile="$(mktemp -t tmp.XXXXXX)"
-#   local ranger_cmd=(
-#     command
-#     ranger
-#     --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
-#   )
-
-#   ${ranger_cmd[@]} "$@"
-#   if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
-#     cd -- "$(cat "$tempfile")" || return
-#   fi
-#   command rm -f -- "$tempfile" 2>/dev/null
-# }
-# alias rr='ranger'
+export NIX_PATH="nixos-config=~/nixos-dotfiles/configuration.nix"
+export PATH=/run/current-system/sw/bin:$PATH
 
 # navigation
 cx() { cd "$@" && l; }
