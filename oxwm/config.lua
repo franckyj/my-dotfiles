@@ -282,6 +282,7 @@ oxwm.key.chord({
 -- Uncomment and modify these examples, or add your own
 
 oxwm.autostart("picom")
-oxwm.autostart("xwallpaper --zoom ~/walls/wallpaper-1.jpg")
+-- o0xwm.autostart("xwallpaper --zoom ~/walls/wallpaper-1.jpg")
+oxwm.autostart("~/scripts/feh-wallpaper-random.sh")
 -- oxwm.autostart("dunst")
 -- oxwm.autostart("nm-applet")
