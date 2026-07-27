@@ -65,7 +65,7 @@ local blocks = {
     pipe(),
     oxwm.bar.block.shell({
         command = "pamixer --get-volume 2>/dev/null || echo 0",
-        format = "{}% ",
+        format = "{}%",
         interval = 2,
         color = colors.foreground,
         underline = false,
@@ -76,7 +76,7 @@ local blocks = {
         format = "󰍛 Ram: {used}/{total} GB",
         interval = 5,
         color = colors.foreground,
-        underline = true,
+        underline = false,
     }),
     pipe(),
     oxwm.bar.block.datetime({
@@ -84,23 +84,25 @@ local blocks = {
         date_format = "%a, %b %d - %-I:%M %P",
         interval = 1,
         color = colors.primary,
-        underline = true,
+        underline = false,
     }),
+    pipe(),
     oxwm.bar.block.static({
         text = "󰐥 ",
         format = "",
         interval = 999999999,
         color = colors.alert,
         underline = false,
-        click = os.getenv("HOME") .. "/.config/oxwm/scripts/power",
+        click = os.getenv("HOME") .. "/.config/oxwm/scripts/power.sh",
     }),
     oxwm.bar.block.static({
-        text = "󰻛 ", format = "",
+        text = "󰻛", format = "",
         interval = 999999999,
         color = colors.secondary,
         underline = false,
         click = "flameshot gui",
     }),
+    pipe(),
     -- Uncomment to add battery status (useful for laptops)
     oxwm.bar.block.battery({
         format = "Bat: {}%",
