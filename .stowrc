@@ -1,7 +1,0 @@
---target=~/.config
---ignore=.stowrc
---ignore=atuin/*
---ignore=.gitignore
---ignore=100-nix.conf
---ignore=install.sh
---ignore=readme.md

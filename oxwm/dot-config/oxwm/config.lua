@@ -54,6 +54,11 @@ local function pipe()
     })
 end
 
+local uname = io.popen("uname -r")
+local result = uname:read("*a") -- Read all output
+uname:close()
+-- os.execute("command")
+
 local blocks = {
     oxwm.bar.block.shell({
         format = " {}",
@@ -316,17 +321,17 @@ oxwm.key.chord({
 oxwm.key.chord({
     { { modkey }, "F" },
     { {},         "B" }
-}, oxwm.spawn({ "sh", "-c", "$HOME/my-dotfiles/scripts/dmenu/bookmarks-dmenu.sh" }))
+}, oxwm.spawn({ "sh", "-c", "$HOME/.config/oxwm/scripts/dmenu/bookmarks-dmenu.sh" }))
 
 oxwm.key.chord({
     { { modkey }, "F" },
     { {},         "F" }
-}, oxwm.spawn({ "sh", "-c", "$HOME/my-dotfiles/scripts/dmenu/repos-dmenu.sh" }))
+}, oxwm.spawn({ "sh", "-c", "$HOME/.config/oxwm/scripts/dmenu/repos-dmenu.sh" }))
 
 oxwm.key.chord({
     { { modkey }, "F" },
     { {},         "O" }
-}, oxwm.spawn({ "sh", "-c", "$HOME/my-dotfiles/scripts/dmenu/tmux-dmenu.sh" }))
+}, oxwm.spawn({ "sh", "-c", "$HOME/.config/oxwm/scripts/dmenu/tmux-dmenu.sh" }))
 
 -------------------------------------------------------------------------------
 -- Autostart
@@ -337,6 +342,4 @@ oxwm.key.chord({
 oxwm.autostart("lxqt-policykit-agent")
 oxwm.autostart("picom --config ~/.config/oxwm/picom/picom.conf -b")
 oxwm.autostart("dunst -config ~/.config/oxwm/dunst/dunstrc")
--- o0xwm.autostart("xwallpaper --zoom ~/walls/wallpaper-1.jpg")
-oxwm.autostart("~/scripts/feh-wallpaper-random.sh")
--- oxwm.autostart("nm-applet")
+oxwm.autostart("~/.config/oxwm/scripts/feh-wallpaper-random.sh")

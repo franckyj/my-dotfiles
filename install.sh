@@ -43,8 +43,12 @@ find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || tru
 
 # create symlinks with stow
 msg "Creating symlinks with stow..."
-cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
-stow .
+
+# create a list of stow packages to install
+stow_packages=("alacritty" "atuin" "dunst" "git" "helix" "oxwm" "picom" "rofi" "starship" "walls" "zsh")
+for package in "${stow_packages[@]}"; do
+    stow -d "$HOME/my-dotfiles" -v -t ~ "$package" --dotfiles || die "Failed to create symlinks with stow - [$package]"
+done
 
 # execute sudo nix-channel --update
 msg "Updating Nix channels..."
