@@ -46,13 +46,16 @@ msg "Creating symlinks with stow..."
 cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
 stow .
 
+# already set the NIX_PATH in .zshrc, so no need to set it here
+export NIX_PATH="nixos-config=$HOME/my-nixos/configuration.nix"
+
 # execute sudo nix-channel --update
 msg "Updating Nix channels..."
 sudo nix-channel --update || die "Failed to update Nix channels"
 
 # rebuild the system configuration
 msg "Rebuilding system configuration..."
-sudo nixos-rebuild switch -I nixos-config=~/my-nixos/configuration.nix --impure || die "Failed to rebuild system configuration"
+sudo nixos-rebuild switch --impure || die "Failed to rebuild system configuration"
 
 msg "Installation completed successfully!"
 msg "Reboot your system to apply all changes."
