@@ -50,7 +50,7 @@ local bar_font = "JetBrainsMono Nerd Font Propo:style=Bold:size=12"
 local function pipe()
     return oxwm.bar.block.static({
         text = " | ", format = "", interval = 999999999,
-        color = colors.sep, underline = false,
+        color = colors.disabled, underline = false,
     })
 end
 
@@ -59,7 +59,7 @@ local blocks = {
         format = " {}",
         command = "uname -r",
         interval = 3600,
-        color = colors.red,
+        color = colors.foreground,
         underline = true,
     }),
     pipe(),
@@ -75,7 +75,7 @@ local blocks = {
     oxwm.bar.block.ram({
         format = "󰍛 Ram: {used}/{total} GB",
         interval = 5,
-        color = colors.light_blue,
+        color = colors.foreground,
         underline = true,
     }),
     pipe(),
@@ -83,8 +83,16 @@ local blocks = {
         format = "󰸘 {}",
         date_format = "%a, %b %d - %-I:%M %P",
         interval = 1,
-        color = colors.cyan,
+        color = colors.primary,
         underline = true,
+    }),
+    oxwm.bar.block.static({
+        text = "󰐥 ",
+        format = "",
+        interval = 999999999,
+        color = colors.alert,
+        underline = false,
+        click = os.getenv("HOME") .. "/.config/oxwm/scripts/power",
     }),
     oxwm.bar.block.static({
         text = "󰻛 ", format = "",
@@ -100,8 +108,12 @@ local blocks = {
         discharging = "- Bat: {}%",
         full = "✓ Bat: {}%",
         interval = 30,
-        color = colors.green,
+        color = colors.alert,
         underline = true,
+    }),
+    oxwm.bar.block.systray({
+        color = colors.primary,
+        underline = false,
     }),
 };
 
@@ -136,9 +148,10 @@ oxwm.set_layout_symbol("scrolling", "󰓡")
 -- Appearance
 -------------------------------------------------------------------------------
 oxwm.border.set_width(2)
-oxwm.border.set_focused_color(colors.purple)
-oxwm.border.set_unfocused_color(colors.grey)
+oxwm.border.set_focused_color(colors.secondary)
+oxwm.border.set_unfocused_color(colors.background_alt)
 
+oxwm.gaps.set_enabled(true)
 -- Smart Enabled = No border if 1 window
 oxwm.gaps.set_smart(false)
 -- Inner gaps (horizontal, vertical) in pixels
@@ -182,11 +195,12 @@ oxwm.bar.set_blocks(blocks)
 -- Parameters: foreground, background, border
 
 -- Unoccupied tags
-oxwm.bar.set_scheme_normal(colors.fg, colors.bg, "#444444")
+oxwm.bar.set_scheme_normal(colors.disabled, colors.background, colors.background)
 -- Occupied tags
-oxwm.bar.set_scheme_occupied(colors.blue, colors.bg, colors.cyan)
+oxwm.bar.set_scheme_occupied(colors.foreground, colors.background, colors.background)
 -- Currently selected tag
-oxwm.bar.set_scheme_selected(colors.blue, colors.bg, colors.purple)
+oxwm.bar.set_scheme_selected(colors.foreground, colors.background_alt, colors.primary)
+oxwm.bar.set_scheme_urgent(colors.background, colors.alert, colors.alert)
 
 -------------------------------------------------------------------------------
 -- Keybindings
