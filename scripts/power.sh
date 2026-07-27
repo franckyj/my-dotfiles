@@ -11,7 +11,7 @@
 # - Make it executable: chmod +x /path/to/power.sh
 # - Run it
 
-ROFI_THEME="$HOME/.config/oxwm/rofi/power.rasi"
+ROFI_THEME="$HOME/.config/rofi/power.rasi"
 
 chosen=$(echo -e "[Cancel]\nLogout\nShutdown\nReboot" | \
     rofi -dmenu -i -p "Power Menu" -line-padding 4 -hide-scrollbar -theme "$ROFI_THEME")
@@ -22,4 +22,3 @@ case "$chosen" in
     "Reboot") systemctl reboot ;;
     *) exit 0 ;; # Exit on cancel or invalid input
 esac
-

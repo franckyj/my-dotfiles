@@ -58,9 +58,9 @@ local blocks = {
     oxwm.bar.block.shell({
         format = " {}",
         command = "uname -r",
-        interval = 3600,
+        interval = 600,
         color = colors.foreground,
-        underline = true,
+        underline = false,
     }),
     pipe(),
     oxwm.bar.block.shell({
@@ -111,7 +111,7 @@ local blocks = {
         full = "✓ Bat: {}%",
         interval = 30,
         color = colors.alert,
-        underline = true,
+        underline = false,
     }),
     oxwm.bar.block.systray({
         color = colors.primary,
