@@ -32,16 +32,11 @@ mkdir -p $HOME/dev/github/franckyj/{my-nixos,my-dotfiles}
 
 # checkout my-nixos
 msg "Checking out my-nixos..."
-git clone https://github.com/franckyj/my-nixos.git "$HOME/my-nixos" || die "Failed to checkout my-nixos"
+git clone -b feature/remove-hm https://github.com/franckyj/my-nixos.git "$HOME/my-nixos" || die "Failed to checkout my-nixos"
 
 # checkout my-dotfiles
 msg "Checking out my-dotfiles..."
-git clone https://github.com/franckyj/my-dotfiles.git "$HOME/my-dotfiles" || die "Failed to checkout my-dotfiles"
-
-# switch to the feature/fix-initial-commit branch for my-dotfiles
-msg "Switching to the feature/fix-initial-commit branch for my-dotfiles..."
-cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
-git checkout feature/fix-initial-commit || die "Failed to switch to feature/fix-initial-commit"
+git clone -b feature/fix-initial-commit https://github.com/franckyj/my-dotfiles.git "$HOME/my-dotfiles" || die "Failed to checkout my-dotfiles"
 
 # make scripts executable
 find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || true
