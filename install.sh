@@ -43,7 +43,7 @@ find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || tru
 
 # create symlinks with stow
 msg "Creating symlinks with stow..."
-# cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
+cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
 stow .
 
 # already set the NIX_PATH in .zshrc, so no need to set it here
