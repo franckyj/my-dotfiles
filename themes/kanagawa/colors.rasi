@@ -1,0 +1,16 @@
+/* Kanagawa — rofi color variables. */
+
+* {
+    bg:          #1F1F28;
+    fg:          #DCD7BA;
+    accent:      #ff9e3b;
+    accent-2:    #ffa066;
+    border:      #ff9e3b;
+    urgent:      #ffa066;
+    selected-fg: #DCD7BA;
+    entry-fg:    #ffa066;
+    prompt-fg:   #ff9e3b;
+    header:      #7e9cd8;
+
+    background-color: @bg;
+}

@@ -1,4 +1,7 @@
 --target=~/.config
 --ignore=.stowrc
---ignore=DS_Store
 --ignore=atuin/*
+--ignore=.gitignore
+--ignore=100-nix.conf
+--ignore=install.sh
+--ignore=readme.md

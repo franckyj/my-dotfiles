@@ -1,0 +1,16 @@
+/* Trapped in Amber — rofi color variables. */
+
+* {
+    bg:          #0a1017;
+    fg:          #f0a020;
+    accent:      #f0a020;
+    accent-2:    #ffc940;
+    border:      #f0a020;
+    urgent:      #e05c1c;
+    selected-fg: #f0a020;
+    entry-fg:    #ffd9a0;
+    prompt-fg:   #ffc940;
+    header:      #f0a020;
+
+    background-color: @bg;
+}

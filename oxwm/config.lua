@@ -6,6 +6,8 @@
 ---Load type definitions for LSP
 ---@module 'oxwm'
 
+-- from https://codeberg.org/justaguylinux/oxwm-setup
+
 -------------------------------------------------------------------------------
 -- Variables
 -------------------------------------------------------------------------------
@@ -23,45 +25,73 @@ local terminal = "alacritty"
 -- local colors = require("colors.lua") and make colors.lua a file
 -- in the ~/.config/oxwm directory
 -- local colors = require("tokyonight");
-local colors = require("colors/gruvbox");
+--------------------------------------------------------------------------------
+-- Palette
+--------------------------------------------------------------------------------
+-- Loaded from the active theme (swapped by scripts/thememenu);
+-- falls back to GitHub Dark.
+local ok, theme = pcall(dofile, os.getenv("HOME") .. "/.config/oxwm/colors.lua")
+local colors = (ok and type(theme) == "table") and theme or {
+    background     = 0x0d1117,
+    background_alt = 0x2f363d,
+    foreground     = 0xd0d7de,
+    primary        = 0xd29922,
+    secondary      = 0xb3e5fc,
+    alert          = 0xd29922,
+    disabled       = 0x4e5b55,
+    border         = 0x0f2923,
+}
 
 local tags = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 -- local tags = { "", "󰊯", "", "󰰏", "󰟿", "󱇤", "", "󱘶", "󰧮" } -- Example of nerd font icon tags
 
 local bar_font = "JetBrainsMono Nerd Font Propo:style=Bold:size=12"
 
+local function pipe()
+    return oxwm.bar.block.static({
+        text = " | ", format = "", interval = 999999999,
+        color = colors.sep, underline = false,
+    })
+end
+
 local blocks = {
     oxwm.bar.block.shell({
         format = " {}",
         command = "uname -r",
-        interval = 999999999,
+        interval = 3600,
         color = colors.red,
         underline = true,
     }),
-    oxwm.bar.block.static({
-        text = "│",
-        interval = 999999999,
-        color = colors.sep,
+    pipe(),
+    oxwm.bar.block.shell({
+        command = "pamixer --get-volume 2>/dev/null || echo 0",
+        format = "{}% ",
+        interval = 2,
+        color = colors.foreground,
         underline = false,
+        click = { command = "alacritty -e pulsemixer", floating = true },
     }),
+    pipe(),
     oxwm.bar.block.ram({
         format = "󰍛 Ram: {used}/{total} GB",
         interval = 5,
         color = colors.light_blue,
         underline = true,
     }),
-    oxwm.bar.block.static({
-        text = "│",
-        interval = 999999999,
-        color = colors.sep,
-        underline = false,
-    }),
+    pipe(),
     oxwm.bar.block.datetime({
         format = "󰸘 {}",
         date_format = "%a, %b %d - %-I:%M %P",
         interval = 1,
         color = colors.cyan,
         underline = true,
+    }),
+    oxwm.bar.block.static({
+        text = "󰻛 ", format = "",
+        interval = 999999999,
+        color = colors.secondary,
+        underline = false,
+        click = "flameshot gui",
     }),
     -- Uncomment to add battery status (useful for laptops)
     oxwm.bar.block.battery({
@@ -82,17 +112,30 @@ oxwm.set_terminal(terminal)
 oxwm.set_modkey(modkey)
 oxwm.set_tags(tags)
 
+oxwm.auto_tile(true)
+local default_layout = "dwindle" -- Mod+Alt+R resets to this
+oxwm.set_layout(default_layout)
+oxwm.bar.set_hide_vacant_tags(false)
+oxwm.set_floating_position("center")
+
 -------------------------------------------------------------------------------
 -- Layouts
 -------------------------------------------------------------------------------
-oxwm.set_layout_symbol("tiling", "[T]")
-oxwm.set_layout_symbol("normie", "[F]")
-oxwm.set_layout_symbol("tabbed", "[=]")
+-- oxwm.set_layout_symbol("tiling", "[T]")
+-- oxwm.set_layout_symbol("normie", "[F]")
+-- oxwm.set_layout_symbol("tabbed", "[=]")
+
+oxwm.set_layout_symbol("tiling", "󰙀")
+oxwm.set_layout_symbol("monocle", "󰕮")
+oxwm.set_layout_symbol("normie", "󰕰") -- floating layout
+oxwm.set_layout_symbol("grid", "󰝘")
+oxwm.set_layout_symbol("dwindle", "󰕴")
+oxwm.set_layout_symbol("scrolling", "󰓡")
 
 -------------------------------------------------------------------------------
 -- Appearance
 -------------------------------------------------------------------------------
-oxwm.border.set_width(0)
+oxwm.border.set_width(2)
 oxwm.border.set_focused_color(colors.purple)
 oxwm.border.set_unfocused_color(colors.grey)
 
@@ -121,6 +164,7 @@ oxwm.rule.add({ instance = "brave-browser", tag = 2 })
 --oxwm.rule.add({ class = "firefox", tag = 3 })
 oxwm.rule.add({ instance = "slack", tag = 4 })
 oxwm.rule.add({ instance = "discord", tag = 5 })
+oxwm.rule.add({ class = "Pavucontrol", floating = true, focus = true })
 
 -- To find window properties, use xprop and click on the window
 -- WM_CLASS(STRING) shows both instance and class (instance, class)
@@ -151,11 +195,24 @@ oxwm.bar.set_scheme_selected(colors.blue, colors.bg, colors.purple)
 
 oxwm.key.bind({ modkey }, "Return", oxwm.spawn_terminal())
 -- Launch Dmenu
--- oxwm.key.bind({ modkey }, "D", oxwm.spawn({ "sh", "-c", "dmenu_run -l 10" }))
-oxwm.key.bind({ modkey }, "D", oxwm.spawn({ "sh", "-c", "rofi -show drun" }))
--- Copy screenshot to clipboard
-oxwm.key.bind({ modkey }, "S", oxwm.spawn({ "sh", "-c", "maim -s | xclip -selection clipboard -t image/png" }))
+oxwm.key.bind({ modkey }, "Space", oxwm.spawn({ "sh", "-c", "rofi -show drun -theme ~/.config/oxwm/rofi/config.rasi" }))
+-- Launch file manager
+oxwm.key.bind({ modkey }, "F", oxwm.spawn({ "thunar" }))
+-- Launch theme menu
+oxwm.key.bind({ modkey, "Shift" }, "T", oxwm.spawn({ "sh", "-c", "~/.config/oxwm/scripts/theme-menu.sh" }))
+
+-- Screenshots (saved to ~/screenshots/)
+oxwm.key.bind({ modkey, "Shift" }, "S", oxwm.spawn({ "sh", "-c", "flameshot gui --path ~/screenshots/" }))
+oxwm.key.bind({ modkey }, "S", oxwm.spawn({ "sh", "-c", "flameshot full --path ~/screenshots/" }))
+oxwm.key.bind({ modkey, "Shift" }, "E", oxwm.spawn({ "sh", "-c", "~/.config/oxwm/scripts/power" }))
+
+-- Quit
 oxwm.key.bind({ modkey }, "Q", oxwm.client.kill())
+
+-- Media keys
+oxwm.key.bind({}, "XF86AudioRaiseVolume", oxwm.spawn({ "sh", "-c", "~/.config/oxwm/scripts/change-volume.sh up" }))
+oxwm.key.bind({}, "XF86AudioLowerVolume", oxwm.spawn({ "sh", "-c", "~/.config/oxwm/scripts/change-volume.sh down" }))
+oxwm.key.bind({}, "XF86AudioMute", oxwm.spawn({ "sh", "-c", "~/.config/oxwm/scripts/change-volume.sh mute" }))
 
 -- Keybind overlay - Shows important keybindings on screen
 oxwm.key.bind({ modkey, "Shift" }, "Slash", oxwm.show_keybinds())
@@ -168,6 +225,13 @@ oxwm.key.bind({ modkey, "Shift" }, "Space", oxwm.client.toggle_floating())
 oxwm.key.bind({ modkey }, "C", oxwm.layout.set("tiling"))
 -- Cycle through layouts
 oxwm.key.bind({ modkey }, "N", oxwm.layout.cycle())
+oxwm.key.bind({ modkey, "Mod1" }, "R", oxwm.layout.set(default_layout))
+oxwm.key.bind({ "Shift", "Control" }, "1", oxwm.layout.set("dwindle"))
+oxwm.key.bind({ "Shift", "Control" }, "2", oxwm.layout.set("tiling"))
+oxwm.key.bind({ "Shift", "Control" }, "3", oxwm.layout.set("scrolling"))
+oxwm.key.bind({ "Shift", "Control" }, "4", oxwm.layout.set("grid"))
+oxwm.key.bind({ "Shift", "Control" }, "5", oxwm.layout.set("monocle"))
+oxwm.key.bind({ "Shift", "Control" }, "6", oxwm.layout.set("normie")) -- floating
 
 -- Master area controls (tiling layout)
 
@@ -203,51 +267,24 @@ oxwm.key.bind({ modkey, "Shift" }, "Comma", oxwm.monitor.tag(-1))
 oxwm.key.bind({ modkey, "Shift" }, "Period", oxwm.monitor.tag(1))
 
 -- Workspace (tag) navigation
--- Switch to workspace N (tags are 0-indexed, so tag "1" is index 0)
-oxwm.key.bind({ modkey }, "1", oxwm.tag.view(0))
-oxwm.key.bind({ modkey }, "2", oxwm.tag.view(1))
-oxwm.key.bind({ modkey }, "3", oxwm.tag.view(2))
-oxwm.key.bind({ modkey }, "4", oxwm.tag.view(3))
-oxwm.key.bind({ modkey }, "5", oxwm.tag.view(4))
-oxwm.key.bind({ modkey }, "6", oxwm.tag.view(5))
-oxwm.key.bind({ modkey }, "7", oxwm.tag.view(6))
-oxwm.key.bind({ modkey }, "8", oxwm.tag.view(7))
-oxwm.key.bind({ modkey }, "9", oxwm.tag.view(8))
+-- Per-tag keys (view / move / toggleview / toggletag)
+local tag_keys = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
+for i, key in ipairs(tag_keys) do
 
--- Move focused window to workspace N
-oxwm.key.bind({ modkey, "Shift" }, "1", oxwm.tag.move_to(0))
-oxwm.key.bind({ modkey, "Shift" }, "2", oxwm.tag.move_to(1))
-oxwm.key.bind({ modkey, "Shift" }, "3", oxwm.tag.move_to(2))
-oxwm.key.bind({ modkey, "Shift" }, "4", oxwm.tag.move_to(3))
-oxwm.key.bind({ modkey, "Shift" }, "5", oxwm.tag.move_to(4))
-oxwm.key.bind({ modkey, "Shift" }, "6", oxwm.tag.move_to(5))
-oxwm.key.bind({ modkey, "Shift" }, "7", oxwm.tag.move_to(6))
-oxwm.key.bind({ modkey, "Shift" }, "8", oxwm.tag.move_to(7))
-oxwm.key.bind({ modkey, "Shift" }, "9", oxwm.tag.move_to(8))
+    -- Switch to workspace N (tags are 0-indexed, so tag "1" is index 0)
+    oxwm.key.bind({ modkey }, key, oxwm.tag.view(i - 1))
 
--- Combo view (view multiple tags at once) {argos_nothing}
--- Example: Mod+Ctrl+2 while on tag 1 will show BOTH tags 1 and 2
-oxwm.key.bind({ modkey, "Control" }, "1", oxwm.tag.toggleview(0))
-oxwm.key.bind({ modkey, "Control" }, "2", oxwm.tag.toggleview(1))
-oxwm.key.bind({ modkey, "Control" }, "3", oxwm.tag.toggleview(2))
-oxwm.key.bind({ modkey, "Control" }, "4", oxwm.tag.toggleview(3))
-oxwm.key.bind({ modkey, "Control" }, "5", oxwm.tag.toggleview(4))
-oxwm.key.bind({ modkey, "Control" }, "6", oxwm.tag.toggleview(5))
-oxwm.key.bind({ modkey, "Control" }, "7", oxwm.tag.toggleview(6))
-oxwm.key.bind({ modkey, "Control" }, "8", oxwm.tag.toggleview(7))
-oxwm.key.bind({ modkey, "Control" }, "9", oxwm.tag.toggleview(8))
+    -- Move focused window to workspace N
+    oxwm.key.bind({ modkey, "Shift" }, key, oxwm.tag.move_to(i - 1))
 
--- Multi tag (window on multiple tags)
--- Example: Mod+Ctrl+Shift+2 puts focused window on BOTH current tag and tag 2
-oxwm.key.bind({ modkey, "Control", "Shift" }, "1", oxwm.tag.toggletag(0))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "2", oxwm.tag.toggletag(1))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "3", oxwm.tag.toggletag(2))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "4", oxwm.tag.toggletag(3))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "5", oxwm.tag.toggletag(4))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "6", oxwm.tag.toggletag(5))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "7", oxwm.tag.toggletag(6))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "8", oxwm.tag.toggletag(7))
-oxwm.key.bind({ modkey, "Control", "Shift" }, "9", oxwm.tag.toggletag(8))
+    -- Combo view (view multiple tags at once) {argos_nothing}
+    -- Example: Mod+Ctrl+2 while on tag 1 will show BOTH tags 1 and 2
+    oxwm.key.bind({ modkey, "Control" }, key, oxwm.tag.toggleview(i - 1))
+
+    -- Multi tag (window on multiple tags)
+    -- Example: Mod+Ctrl+Shift+2 puts focused window on BOTH current tag and tag 2
+    oxwm.key.bind({ modkey, "Control", "Shift" }, key, oxwm.tag.toggletag(i - 1))
+end
 
 -------------------------------------------------------------------------------
 -- Advanced: Keychords
@@ -263,17 +300,17 @@ oxwm.key.chord({
 oxwm.key.chord({
     { { modkey }, "F" },
     { {},         "B" }
-}, oxwm.spawn({ "sh", "-c", "$HOME/repos/dmenu-scripts/bookmarks-dmenu.sh" }))
+}, oxwm.spawn({ "sh", "-c", "$HOME/my-dotfiles/scripts/dmenu/bookmarks-dmenu.sh" }))
 
 oxwm.key.chord({
     { { modkey }, "F" },
     { {},         "F" }
-}, oxwm.spawn({ "sh", "-c", "$HOME/repos/dmenu-scripts/repos-dmenu.sh" }))
+}, oxwm.spawn({ "sh", "-c", "$HOME/my-dotfiles/scripts/dmenu/repos-dmenu.sh" }))
 
 oxwm.key.chord({
     { { modkey }, "F" },
     { {},         "O" }
-}, oxwm.spawn({ "sh", "-c", "$HOME/repos/dmenu-scripts/tmux-dmenu.sh" }))
+}, oxwm.spawn({ "sh", "-c", "$HOME/my-dotfiles/scripts/dmenu/tmux-dmenu.sh" }))
 
 -------------------------------------------------------------------------------
 -- Autostart
@@ -281,8 +318,9 @@ oxwm.key.chord({
 -- Commands to run once when OXWM starts
 -- Uncomment and modify these examples, or add your own
 
-oxwm.autostart("picom")
+oxwm.autostart("lxqt-policykit-agent")
+oxwm.autostart("picom --config ~/.config/oxwm/picom/picom.conf -b")
+oxwm.autostart("dunst -config ~/.config/oxwm/dunst/dunstrc")
 -- o0xwm.autostart("xwallpaper --zoom ~/walls/wallpaper-1.jpg")
 oxwm.autostart("~/scripts/feh-wallpaper-random.sh")
--- oxwm.autostart("dunst")
 -- oxwm.autostart("nm-applet")
