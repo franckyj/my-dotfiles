@@ -38,12 +38,17 @@ git clone https://github.com/franckyj/my-nixos.git "$HOME/my-nixos" || die "Fail
 msg "Checking out my-dotfiles..."
 git clone https://github.com/franckyj/my-dotfiles.git "$HOME/my-dotfiles" || die "Failed to checkout my-dotfiles"
 
+# switch to the feature/fix-initial-commit branch for my-dotfiles
+msg "Switching to the feature/fix-initial-commit branch for my-dotfiles..."
+cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
+git checkout feature/fix-initial-commit || die "Failed to switch to feature/fix-initial-commit"
+
 # make scripts executable
 find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || true
 
 # create symlinks with stow
 msg "Creating symlinks with stow..."
-cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
+# cd "$HOME/my-dotfiles" || die "Failed to change directory to my-dotfiles"
 stow .
 
 # already set the NIX_PATH in .zshrc, so no need to set it here
