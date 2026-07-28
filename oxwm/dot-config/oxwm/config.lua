@@ -24,23 +24,23 @@ local terminal = "alacritty"
 -- Alternatively you can import other files in here, such as
 -- local colors = require("colors.lua") and make colors.lua a file
 -- in the ~/.config/oxwm directory
--- local colors = require("tokyonight");
+local colors = require("colors/rose-pine-moon");
 --------------------------------------------------------------------------------
 -- Palette
 --------------------------------------------------------------------------------
 -- Loaded from the active theme (swapped by scripts/thememenu);
 -- falls back to GitHub Dark.
-local ok, theme = pcall(dofile, os.getenv("HOME") .. "/.config/oxwm/colors.lua")
-local colors = (ok and type(theme) == "table") and theme or {
-    background     = 0x0d1117,
-    background_alt = 0x2f363d,
-    foreground     = 0xd0d7de,
-    primary        = 0xd29922,
-    secondary      = 0xb3e5fc,
-    alert          = 0xd29922,
-    disabled       = 0x4e5b55,
-    border         = 0x0f2923,
-}
+-- local ok, theme = pcall(dofile, os.getenv("HOME") .. "/.config/oxwm/colors.lua")
+-- local colors = (ok and type(theme) == "table") and theme or {
+--     background     = 0x0d1117,
+--     background_alt = 0x2f363d,
+--     foreground     = 0xd0d7de,
+--     primary        = 0xd29922,
+--     secondary      = 0xb3e5fc,
+--     alert          = 0xd29922,
+--     disabled       = 0x4e5b55,
+--     border         = 0x0f2923,
+-- }
 
 local tags = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 -- local tags = { "", "󰊯", "", "󰰏", "󰟿", "󱇤", "", "󱘶", "󰧮" } -- Example of nerd font icon tags
