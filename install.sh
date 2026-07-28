@@ -45,7 +45,7 @@ find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || tru
 msg "Creating symlinks with stow..."
 
 # create a list of stow packages to install
-stow_packages=("alacritty" "atuin" "dunst" "git" "helix" "oxwm" "picom" "rofi" "starship" "walls" "zsh")
+stow_packages=("alacritty" "atuin" "dunst" "git" "helix" "oxwm" "picom" "rofi" "starship" "wallpapers" "zsh")
 for package in "${stow_packages[@]}"; do
     stow -d "$HOME/my-dotfiles" -v -t ~ "$package" --dotfiles || die "Failed to create symlinks with stow - [$package]"
 done
