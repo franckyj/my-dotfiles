@@ -114,8 +114,8 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 
 # Nix!
 # export NIX_CONF_DIR=$HOME/.config/nix
-export NIX_PATH="nixos-config=~/nixos-dotfiles/configuration.nix"
-export PATH=/run/current-system/sw/bin:$PATH
+export NIX_PATH="nixos-config=/home/zibbble/nixos-dotfiles/configuration.nix"
+#export PATH=/run/current-system/sw/bin:$PATH
 
 # navigation
 cx() { cd "$@" && l; }
