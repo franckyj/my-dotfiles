@@ -1,0 +1,20 @@
+# theme = "modus_operandi"
+theme = "autumn"
+# theme = "darcula"
+# theme = "oldbook"
+
+[editor]
+color-modes = true
+middle-click-paste = false
+bufferline = "always"
+
+[editor.statusline]
+left = ["mode", "spinner", "file-absolute-path", "read-only-indicator", "file-modification-indicator", "separator", "version-control"]
+
+[editor.cursor-shape]
+insert = "underline"
+
+[editor.file-picker]
+hidden = false
+ignore = false
+git-ignore = false

@@ -1,0 +1,12 @@
+[language-server.rust-analyzer.config]
+# check = {command = "clippy", extraArgs = ["--", "-W", "clippy::unwrap_used", "-W", "clippy::expect_used", "-W", "clippy::pedantic", "-W", "clippy::nursery"]}
+check.command = "clippy"
+
+[[language]]
+name = "go"
+
+[language-server.gopls.config]
+"ui.diagnostic.staticcheck" = true
+"formatting.gofumpt" = true
+# This tells gopls to include these tags when analyzing your code.
+buildFlags = ["-tags=integration"]
