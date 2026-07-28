@@ -6,6 +6,8 @@
 ## Rofi   : Power Menu
 #
 ## Available Styles
+# https://github.com/adi1090x/rofi/tree/master
+# https://github.com/newmanls/rofi-themes-collection/tree/master
 
 # Current Theme
 dir="$HOME/.config/rofi"
