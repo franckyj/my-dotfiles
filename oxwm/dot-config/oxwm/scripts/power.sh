@@ -96,6 +96,10 @@ case ${chosen} in
     $logout)
     run_cmd --logout
         ;;
+    $cancel)
+    exit 0
+        ;;
+    *) exit 0 ;; # Exit on cancel or invalid input
 esac
 
 # ========================

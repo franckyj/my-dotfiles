@@ -56,7 +56,7 @@ window {
 
     background-color:   @bg0;
     border:             2px solid;
-    border-color:       @yel;
+    border-color:       @pur;
 }
 
 inputbar {
