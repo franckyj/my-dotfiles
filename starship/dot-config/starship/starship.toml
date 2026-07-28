@@ -100,7 +100,7 @@ disabled = true
 show_always = true
 style_user = "bg:#d1005b fg:#23000F"
 style_root = "bg:#d1005b fg:#23000F"
-format = '[ $user]($style)'
+format = '[$user]($style)'
 disabled = false
 
 # Displays a symbol that represents the current operating system
