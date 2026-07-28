@@ -61,7 +61,7 @@ local blocks = {
     oxwm.bar.block.shell({
         format = " {}",
         command = "uname -r",
-        interval = 5,
+        interval = 600,
         color = colors.foreground,
         underline = false,
     }),
