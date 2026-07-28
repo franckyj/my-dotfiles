@@ -66,7 +66,7 @@ local blocks = {
     --     underline = false,
     -- }),
     oxwm.bar.block.static({
-        text = os_name .. " ",
+        text = os_name .. " (" .. arch_name .. ")",
         format = "",
         interval = 999999999,
         color = colors.alert,
