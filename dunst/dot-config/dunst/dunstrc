@@ -23,7 +23,8 @@
     foreground = "#e0def4"
 
     # Text
-    font = JetBrainsMono Nerd Font 12
+    # font = JetBrainsMono Nerd Font 12
+    font = "FiraCode Nerd Font Medium 12"
     line_height = 2
     markup = full
     format = "<b>%s</b>\n%b"
