@@ -54,16 +54,11 @@ local function pipe()
     })
 end
 
-local uname = io.popen("/bin/sh -c uname -r")
-local result = uname:read("*a") -- Read all output
-uname:close()
--- os.execute("command")
-
 local blocks = {
     oxwm.bar.block.shell({
         format = " {}",
         command = "uname -r",
-        interval = 600,
+        interval = 999999999,
         color = colors.foreground,
         underline = false,
     }),
