@@ -38,11 +38,12 @@ command_timeout = 3000
 #
 # Note: Not supported in Powershell
 # @see: https://starship.rs/advanced-config/#enable-right-prompt
+# remove the memory_usage
+# /\
+# $memory_usage\
 right_format = """
 [](bg:transparent fg:#68032f)\
 $time\
-/\
-$memory_usage\
 [](fg:#68032f bg:transparent)\
 """
 
