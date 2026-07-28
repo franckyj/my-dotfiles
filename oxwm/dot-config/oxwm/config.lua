@@ -123,10 +123,7 @@ local blocks = {
         color = colors.alert,
         underline = false,
     }),
-    oxwm.bar.block.systray({
-        color = colors.primary,
-        underline = false,
-    }),
+    oxwm.bar.block.systray({}),
 };
 
 -------------------------------------------------------------------------------
