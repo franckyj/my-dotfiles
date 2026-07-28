@@ -54,24 +54,24 @@ local function pipe()
     })
 end
 
-gon = require("get_os_name")
-os_name, arch_name = gon.get_os_name()
+-- gon = require("get_os_name")
+-- os_name, arch_name = gon.get_os_name()
 
 local blocks = {
-    -- oxwm.bar.block.shell({
-    --     format = " {}",
-    --     command = "uname -r",
-    --     interval = 999999999,
-    --     color = colors.foreground,
-    --     underline = false,
-    -- }),
-    oxwm.bar.block.static({
-        text = os_name .. " (" .. arch_name .. ")",
-        format = "",
-        interval = 999999999,
-        color = colors.alert,
-        underline = false
+    oxwm.bar.block.shell({
+        format = " {}",
+        command = "uname -r",
+        interval = 5,
+        color = colors.foreground,
+        underline = false,
     }),
+    -- oxwm.bar.block.static({
+    --     text = os_name .. " (" .. arch_name .. ")",
+    --     format = "",
+    --     interval = 999999999,
+    --     color = colors.alert,
+    --     underline = false
+    -- }),
     pipe(),
     oxwm.bar.block.shell({
         command = "pamixer --get-volume 2>/dev/null || echo 0",
