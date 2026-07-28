@@ -84,8 +84,8 @@ $character\
 
 # Exit code indicator
 [character] # The name of the module we are configuring is 'character'
-success_symbol = '[](bg:#68032F fg:#D1005B)[󱇫 ](bg:#D1005B fg:#23000F)[](fg:#D1005B bg:transparent)'
-error_symbol = '[](bg:#68032F fg:#FF003E)[󱇫 ](bg:#FF003E fg:#300000)[](fg:#FF003E bg:transparent)'
+success_symbol = '[](bg:#68032F fg:#D1005B)[󱇫](bg:#D1005B fg:#23000F)[](fg:#D1005B bg:transparent)'
+error_symbol = '[](bg:#68032F fg:#FF003E)[󱇫](bg:#FF003E fg:#300000)[](fg:#FF003E bg:transparent)'
 format = '$symbol '
 
 # cross-platform way to check if we are in a git repo, takes 200ms
