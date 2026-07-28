@@ -3,15 +3,15 @@
     monitor = 0
     follow = keyboard
     origin = top-right
-    offset = 10x50
+    offset = (50, 50)
     width = 500
     height = 300
     indicate_hidden = yes
     shrink = no
     transparency = 0
     separator_height = 2
-    padding = 15
-    horizontal_padding = 15
+    padding = 12
+    horizontal_padding = 12
     frame_width = 3
     separator_color = auto
     sort = yes
@@ -23,7 +23,7 @@
     foreground = "#e0def4"
 
     # Text
-    font = JetBrainsMono Nerd Font 11
+    font = JetBrainsMono Nerd Font 12
     line_height = 2
     markup = full
     format = "<b>%s</b>\n%b"
@@ -42,7 +42,7 @@
     min_icon_size = 16
     max_icon_size = 32
     enable_recursive_icon_lookup = true
-    icon_theme = "rose-pine-icons"
+    icon_theme = "oomox-rose-pine-moon"
 
     # History
     sticky_history = yes
