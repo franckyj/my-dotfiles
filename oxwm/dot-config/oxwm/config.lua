@@ -54,6 +54,11 @@ local function pipe()
     })
 end
 
+local uname = io.popen("/bin/sh -c uname -r")
+local result = uname:read("*a") -- Read all output
+uname:close()
+-- os.execute("command")
+
 local blocks = {
     oxwm.bar.block.shell({
         format = " {}",
@@ -211,7 +216,7 @@ oxwm.bar.set_scheme_urgent(colors.background, colors.alert, colors.alert)
 
 oxwm.key.bind({ modkey }, "Return", oxwm.spawn_terminal())
 -- Launch Dmenu
-oxwm.key.bind({ modkey }, "Space", oxwm.spawn({ "sh", "-c", "rofi -show drun -theme ~/.config/oxwm/rofi/config.rasi" }))
+oxwm.key.bind({ modkey }, "Space", oxwm.spawn({ "sh", "-c", "rofi -show drun -theme ~/.config/rofi/config.rasi" }))
 -- Launch file manager
 oxwm.key.bind({ modkey }, "F", oxwm.spawn({ "thunar" }))
 -- Launch theme menu
