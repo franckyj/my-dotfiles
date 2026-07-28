@@ -4,8 +4,8 @@
     follow = keyboard
     origin = top-right
     offset = (50, 50)
-    # width = 500
-    height = (300, 300)
+    width = 400
+    height = (75, 75)
     indicate_hidden = yes
     shrink = no
     transparency = 0
