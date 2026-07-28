@@ -114,15 +114,15 @@ local blocks = {
     }),
     pipe(),
     -- Uncomment to add battery status (useful for laptops)
-    oxwm.bar.block.battery({
-        format = "Bat: {}%",
-        charging = "⚡ Bat: {}%",
-        discharging = "- Bat: {}%",
-        full = "✓ Bat: {}%",
-        interval = 30,
-        color = colors.alert,
-        underline = false,
-    }),
+    -- oxwm.bar.block.battery({
+    --     format = "Bat: {}%",
+    --     charging = "⚡ Bat: {}%",
+    --     discharging = "- Bat: {}%",
+    --     full = "✓ Bat: {}%",
+    --     interval = 30,
+    --     color = colors.alert,
+    --     underline = false,
+    -- }),
     oxwm.bar.block.systray({}),
 };
 
