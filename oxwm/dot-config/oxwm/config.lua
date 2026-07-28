@@ -95,7 +95,8 @@ local blocks = {
     --     underline = false,
     -- }),
     oxwm.bar.block.static({
-        text = getOS() .. " ",
+        -- text = getOS() .. " ",
+        text = "test",
         format = "",
         interval = 999999999,
         color = colors.alert,
