@@ -62,7 +62,7 @@ local blocks = {
         format = " {}",
         command = "uname -r",
         interval = 600,
-        color = colors.foreground,
+        color = colors.alert,
         underline = false,
     }),
     -- oxwm.bar.block.static({
