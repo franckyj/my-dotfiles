@@ -59,13 +59,8 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
-# VIM
-#alias v="/Users/omerxx/.nix-profile/bin/nvim"
-
 # Nmap
 alias nm="nmap -sC -sV -oN nmap"
-
-# export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 alias cl='clear'
 
@@ -90,27 +85,16 @@ alias cl='clear'
 # alias http="xh"
 
 # VI Mode!!!
-bindkey jj vi-cmd-mode
+# bindkey jj vi-cmd-mode
 
 # Eza
 alias l="eza -l --icons --git -a"
 alias lt="eza --tree --level=2 --long --icons --git"
 alias ltree="eza --tree --level=2  --icons --git"
 
-# SEC STUFF
-# alias gobust='gobuster dir --wordlist ~/security/wordlists/diccnoext.txt --wildcard --url'
-# alias dirsearch='python dirsearch.py -w db/dicc.txt -b -u'
-# alias massdns='~/hacking/tools/massdns/bin/massdns -r ~/hacking/tools/massdns/lists/resolvers.txt -t A -o S bf-targets.txt -w livehosts.txt -s 4000'
-# alias server='python -m http.server 4445'
-# alias tunnel='ngrok http 4445'
-# alias fuzz='ffuf -w ~/hacking/SecLists/content_discovery_all.txt -mc all -u'
-# alias gr='~/go/src/github.com/tomnomnom/gf/gf'
-
 ### FZF ###
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# export PATH=/opt/homebrew/bin:$PATH
 
 # Nix!
 # export NIX_CONF_DIR=$HOME/.config/nix
