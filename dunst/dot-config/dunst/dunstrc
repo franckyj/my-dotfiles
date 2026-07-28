@@ -42,7 +42,7 @@
     min_icon_size = 16
     max_icon_size = 32
     enable_recursive_icon_lookup = true
-    icon_theme = "oomox-rose-pine-moon"
+    icon_theme = "rose-pine-moon"
 
     # History
     sticky_history = yes
