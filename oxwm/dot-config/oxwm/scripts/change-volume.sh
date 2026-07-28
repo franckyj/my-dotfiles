@@ -21,12 +21,12 @@ case $1 in
 up)
   # Set the volume on (if it was muted)
   pamixer -u
-  pamixer -i 2 --allow-boost
+  pamixer -i 2 --allow-boost --set-limit 120
   send_notification
   ;;
 down)
   pamixer -u
-  pamixer -d 2 --allow-boost
+  pamixer -d 2 --allow-boost --set-limit 120
   send_notification
   ;;
 mute)
