@@ -14,15 +14,19 @@ THEMES_DIR="$OXWM_DIR/themes"
 ACTIVE_THEME_FILE="$HOME/.cache/oxwm/current_theme"
 
 ACTIVE_COLORS_LUA="$OXWM_DIR/colors.lua"     # oxwm bar/border palette (dofile'd by config.lua)
-ACTIVE_ROFI_COLORS="$OXWM_DIR/rofi/colors.rasi"
-DUNSTRC="$OXWM_DIR/dunst/dunstrc"
+# ACTIVE_ROFI_COLORS="$OXWM_DIR/rofi/colors.rasi"
+ACTIVE_ROFI_COLORS="$HOME/.config/rofi/colors.rasi"
+# DUNSTRC="$OXWM_DIR/dunst/dunstrc"
+DUNSTRC="$HOME/.config/dunst/dunstrc"
 OXWM_CONFIG="$OXWM_DIR/config.lua"           # holds the feh autostart line
 
 GTK3_CONF="$HOME/.config/gtk-3.0/settings.ini"
 XSETTINGSD_CONF="$HOME/.xsettingsd"
-WALLPAPER_DIR="$OXWM_DIR/wallpaper"
+# WALLPAPER_DIR="$OXWM_DIR/wallpaper"
+WALLPAPER_DIR="$HOME/walls"
 
-ROFI_THEME="$OXWM_DIR/rofi/config.rasi"
+# ROFI_THEME="$OXWM_DIR/rofi/config.rasi"
+ROFI_THEME="$HOME/.config/rofi/config.rasi"
 
 mkdir -p "$(dirname "$ACTIVE_THEME_FILE")"
 
