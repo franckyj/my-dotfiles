@@ -98,21 +98,21 @@ local blocks = {
     }),
     pipe(),
     oxwm.bar.block.static({
-        text = "󰐥 ",
+        text = "󰻛 ", format = "",
+        interval = 999999999,
+        color = colors.secondary,
+        underline = false,
+        click = "flameshot gui",
+    }),
+    oxwm.bar.block.static({
+        text = "󰐥",
         format = "",
         interval = 999999999,
         color = colors.alert,
         underline = false,
         click = os.getenv("HOME") .. "/.config/oxwm/scripts/power.sh",
     }),
-    oxwm.bar.block.static({
-        text = "󰻛", format = "",
-        interval = 999999999,
-        color = colors.secondary,
-        underline = false,
-        click = "flameshot gui",
-    }),
-    pipe(),
+    -- pipe(),
     -- Uncomment to add battery status (useful for laptops)
     -- oxwm.bar.block.battery({
     --     format = "Bat: {}%",
@@ -123,7 +123,7 @@ local blocks = {
     --     color = colors.alert,
     --     underline = false,
     -- }),
-    oxwm.bar.block.systray({}),
+    -- oxwm.bar.block.systray({}),
 };
 
 -------------------------------------------------------------------------------
