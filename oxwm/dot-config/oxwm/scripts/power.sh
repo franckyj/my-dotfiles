@@ -12,23 +12,22 @@ dir="$HOME/.config/rofi"
 theme='power'
 
 # CMDs
-uptime="`uptime -p | sed -e 's/up //g'`"
 host=`hostname`
 
 # Options
-shutdown=' Shutdown'
-reboot=' Reboot'
+cancel='\Uf0156 [Cancel]'
+shutdown='\Uf0425 Shutdown'
+reboot='\Uf0709 Reboot'
 # lock=' Lock'
-suspend=' Suspend'
-logout=' Logout'
-yes=' Yes'
-no=' No'
+suspend='\Uf04b2 Suspend'
+logout='\Uf0343 Logout'
+yes='Yes'
+no='No'
 
 # Rofi CMD
 rofi_cmd() {
   rofi -dmenu \
     -p "$host" \
-    -mesg "Uptime: $uptime" \
     -theme ${dir}/${theme}.rasi
 }
 
@@ -98,3 +97,29 @@ case ${chosen} in
     run_cmd --logout
         ;;
 esac
+
+# ========================
+# #!/usr/bin/env bash
+
+# # Simple script to handle a DIY shutdown menu with rofi.
+# #
+# # Requirements:
+# # - rofi
+# # - systemd (can be replaced for other init systems if needed)
+# #
+# # Instructions:
+# # - Save this file as power.sh
+# # - Make it executable: chmod +x /path/to/power.sh
+# # - Run it
+
+# ROFI_THEME="$HOME/.config/rofi/power.rasi"
+
+# chosen=$(echo -e "[Cancel]\nLogout\nShutdown\nReboot" | \
+#     rofi -dmenu -i -p "Power Menu" -line-padding 4 -hide-scrollbar -theme "$ROFI_THEME")
+
+# case "$chosen" in
+#     "Logout") pkill oxwm ;;
+#     "Shutdown") systemctl poweroff ;;
+#     "Reboot") systemctl reboot ;;
+#     *) exit 0 ;; # Exit on cancel or invalid input
+# esac
