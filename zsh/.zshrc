@@ -7,8 +7,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit
 compinit
-source <(kubectl completion zsh)
-#complete -C '/usr/local/bin/aws_completer' aws
+# source <(kubectl completion zsh)
 
 #source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^w' autosuggest-execute
@@ -71,24 +70,24 @@ alias nm="nmap -sC -sV -oN nmap"
 alias cl='clear'
 
 # K8S
-export KUBECONFIG=~/.kube/config
-alias k="kubectl"
-alias ka="kubectl apply -f"
-alias kg="kubectl get"
-alias kd="kubectl describe"
-alias kdel="kubectl delete"
-alias kl="kubectl logs"
-alias kgpo="kubectl get pod"
-alias kgd="kubectl get deployments"
-alias kc="kubectx"
-alias kns="kubens"
-alias kl="kubectl logs -f"
-alias ke="kubectl exec -it"
-alias kcns='kubectl config set-context --current --namespace'
-alias podname=''
+# export KUBECONFIG=~/.kube/config
+# alias k="kubectl"
+# alias ka="kubectl apply -f"
+# alias kg="kubectl get"
+# alias kd="kubectl describe"
+# alias kdel="kubectl delete"
+# alias kl="kubectl logs"
+# alias kgpo="kubectl get pod"
+# alias kgd="kubectl get deployments"
+# alias kc="kubectx"
+# alias kns="kubens"
+# alias kl="kubectl logs -f"
+# alias ke="kubectl exec -it"
+# alias kcns='kubectl config set-context --current --namespace'
+# alias podname=''
 
 # HTTP requests with xh!
-alias http="xh"
+# alias http="xh"
 
 # VI Mode!!!
 bindkey jj vi-cmd-mode
