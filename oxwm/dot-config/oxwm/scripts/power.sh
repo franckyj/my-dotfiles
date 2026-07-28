@@ -21,8 +21,8 @@ reboot='\Uf0709 Reboot'
 # lock=' Lock'
 suspend='\Uf04b2 Suspend'
 logout='\Uf0343 Logout'
-yes='Yes'
-no='No'
+yes=':) Yes'
+no=':( No'
 
 # Rofi CMD
 rofi_cmd() {
@@ -52,7 +52,7 @@ confirm_exit() {
 # Pass variables to rofi dmenu
 run_rofi() {
   # $lock\n
-  echo -e "$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
+  echo -e "$cancel\n$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
 }
 
 # Execute Command
