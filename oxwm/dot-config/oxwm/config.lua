@@ -47,44 +47,15 @@ local tags = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
 local bar_font = "JetBrainsMono Nerd Font Propo:style=Bold:size=12"
 
-local function getOS()
-    -- Check for LuaJIT first (fastest)
-    if jit and jit.os then
-        return jit.os
-    end
-
-    -- Check path separator to distinguish Windows from Unix
-    if package.config:sub(1, 1) == '\\' then
-        -- Windows: use environment variables
-        local env_os = os.getenv('OS')
-        if env_os then
-            return env_os
-        end
-        return 'Windows'
-    else
-        -- Unix/Linux/Mac: use uname
-        local handle = io.popen('uname -s', 'r')
-        if handle then
-            local os_name = handle:read('*l')
-            handle:close()
-            if os_name then
-                -- Normalize Mac/Darwin to Mac
-                if os_name:match('Darwin') then
-                    return 'Mac'
-                end
-                return os_name
-            end
-        end
-    end
-    return 'Unknown'
-end
-
 local function pipe()
     return oxwm.bar.block.static({
         text = " | ", format = "", interval = 999999999,
         color = colors.disabled, underline = false,
     })
 end
+
+gon = require("get_os_name")
+os_name, arch_name = gon.get_os_name()
 
 local blocks = {
     -- oxwm.bar.block.shell({
@@ -95,8 +66,7 @@ local blocks = {
     --     underline = false,
     -- }),
     oxwm.bar.block.static({
-        -- text = getOS() .. " ",
-        text = "test",
+        text = os_name .. " ",
         format = "",
         interval = 999999999,
         color = colors.alert,
