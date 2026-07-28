@@ -15,7 +15,6 @@ window {
     width: 20%;
     transparency: "real";
     orientation: vertical;
-    border-color: @accent-2;
     border-radius: 10px;
 }
 
@@ -28,18 +27,7 @@ mainbox {
 
 element {
     padding: 4 8;
-    text-color: @bg;
     border-radius: 5px;
-}
-
-element.selected {
-    text-color: @selected-fg;
-    background-color: @accent-2;
-}
-
-element-text {
-    background-color: inherit;
-    text-color: inherit;
 }
 
 element-icon {
@@ -47,41 +35,6 @@ element-icon {
     background-color: inherit;
     padding: 0 6 0 0;
     alignment: vertical;
-}
-
-element.selected.active {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.alternate.normal {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.alternate.active {
-    background-color: @accent;
-    text-color: @fg;
-}
-
-element.selected.normal {
-    background-color: @accent;
-    text-color: @bg;
-}
-
-element.normal.active {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.normal.normal {
-    background-color: @bg;
-    text-color: @fg;
-}
-
-element.normal.urgent {
-    background-color: @urgent;
-    text-color: @bg;
 }
 
 listview {
@@ -100,13 +53,11 @@ inputbar {
 }
 
 entry {
-    text-color: @entry-fg;
     padding: 10 10 0 0;
     margin: 0 -2 0 0;
 }
 
 prompt {
-    text-color: @prompt-fg;
     padding: 10 6 0 10;
     margin: 0 -2 0 0;
 }

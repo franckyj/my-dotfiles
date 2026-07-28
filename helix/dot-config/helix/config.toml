@@ -1,7 +1,4 @@
-# theme = "modus_operandi"
-theme = "autumn"
-# theme = "darcula"
-# theme = "oldbook"
+theme = "rose_pine_moon"
 
 [editor]
 color-modes = true

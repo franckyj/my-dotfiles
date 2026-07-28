@@ -1,73 +1,15 @@
-# from https://gist.github.com/webbertakken/b5413d9a8bcb3644974d719393179b74
-# Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-#############
-#   Notes   #
-#############
-
-# This config assumes you have a Nerd Font installed and enabled in your terminal.
-# I use 'FiraCode Nerd Font Mono', but you should be able to use any Nerd Font you like.
-
-################
-#   Settings   #
-################
-
-# Inserts a blank line between shell prompts
-add_newline = true
-
-# Maximum time it may take to produce the prompt
-command_timeout = 3000
-
-########################
-#   Webber's colours   #
-########################
-
-# Bright pink: (bg:#D1005B fg:#23000F)
-# Middle pink, bright text: (bg:#68032F fg:#F7BCD6)
-# Middle pink, faded text: (bg:#68032F fg:#D7748C)
-# Dark pink, regular text: (bg:#43001D fg:#C37093)
-# Dark pink, highlighted: (bg:#43001D fg:#D1005B)
-
-###############
-#   Prompts   #
-###############
-
-# Right prompt. This is displayed on the right side of the terminal.
-# Colours (i.e. bg and fg) are always listed from left to right.
-#
-# Note: Not supported in Powershell
-# @see: https://starship.rs/advanced-config/#enable-right-prompt
-# remove the memory_usage
-# /\
-# $memory_usage\
-right_format = """
-[](bg:transparent fg:#68032f)\
-$time\
-[](fg:#68032f bg:transparent)\
-"""
-
-# Left prompt. This is displayed on the left side of the terminal.
-# Colours (i.e. bg and fg) are always listed from left to right.
 format = """
-[](bg:#transparent fg:#d1005b)\
 $username\
-$os\
-[](fg:#d1005b bg:#68032F)\
 $directory\
-${custom.pregit}\
 $git_branch\
-$git_state\
-$git_metrics\
 $git_status\
-${custom.postgit}\
-${custom.nogit}\
-$package\
+$fill\
 $c\
 $elixir\
 $elm\
 $golang\
-$gradle\
 $haskell\
 $java\
 $julia\
@@ -75,302 +17,149 @@ $nodejs\
 $nim\
 $rust\
 $scala\
-$docker_context\
-$character\
+$conda\
+$python\
+$time\n  \
+[󱞪](fg:iris) \
 """
 
-########################
-#   Special sections   #
-########################
+palette = "rose-pine-moon"
 
-# Exit code indicator
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[](bg:#68032F fg:#D1005B)[󱇫](bg:#D1005B fg:#23000F)[](fg:#D1005B bg:transparent)'
-error_symbol = '[](bg:#68032F fg:#FF003E)[󱇫](bg:#FF003E fg:#300000)[](fg:#FF003E bg:transparent)'
-format = '$symbol '
+[palettes.rose-pine-moon]
+overlay = '#393552'
+love = '#eb6f92'
+gold = '#f6c177'
+rose = '#ea9a97'
+pine = '#3e8fb0'
+foam = '#9ccfd8'
+iris = '#c4a7e7'
 
-# cross-platform way to check if we are in a git repo, takes 200ms
-[custom.nogit]
-when = ''' git rev-parse --git-dir ; test $? = False '''
-format = '[ ](bg:#68032F)'
-disabled = true
-
-# Either `Administrator`, `root` or the current user's username.
-[username]
-show_always = true
-style_user = "bg:#d1005b fg:#23000F"
-style_root = "bg:#d1005b fg:#23000F"
-format = '[$user]($style)'
-disabled = false
-
-# Displays a symbol that represents the current operating system
-[os]
-style = "bg:#ff005d fg:black"
-format = '[ $symbol]($style)'
-disabled = true # This doesn't work in pwsh in Webstorm terminal.
-
-# The current directory
 [directory]
-style = "bg:#68032F fg:#F7BCD6"
-format = "[ $path ]($style)"
+format = "[](fg:overlay)[ $path ]($style)[](fg:overlay) "
+style = "bg:overlay fg:pine"
 truncation_length = 3
 truncation_symbol = "…/"
 
-[hostname]
-ssh_symbol = ""
+[directory.substitutions]
+Documents = "󰈙"
+Downloads = " "
+Music = " "
+Pictures = " "
 
-[memory_usage]
-symbol = "󰍛"
+[fill]
+style = "fg:overlay"
+symbol = " "
+
+[git_branch]
+format = "[](fg:overlay)[ $symbol $branch ]($style)[](fg:overlay) "
+style = "bg:overlay fg:foam"
+symbol = ""
+
+[git_status]
+disabled = false
+style = "bg:overlay fg:love"
+format = '[](fg:overlay)([$all_status$ahead_behind]($style))[](fg:overlay) '
+up_to_date = '[ ✓ ](bg:overlay fg:iris)'
+untracked = '[?\($count\)](bg:overlay fg:gold)'
+stashed = '[\$](bg:overlay fg:iris)'
+modified = '[!\($count\)](bg:overlay fg:gold)'
+renamed = '[»\($count\)](bg:overlay fg:iris)'
+deleted = '[✘\($count\)](style)'
+staged = '[++\($count\)](bg:overlay fg:gold)'
+ahead = '[⇡\(${count}\)](bg:overlay fg:foam)'
+diverged = '⇕[\[](bg:overlay fg:iris)[⇡\(${ahead_count}\)](bg:overlay fg:foam)[⇣\(${behind_count}\)](bg:overlay fg:rose)[\]](bg:overlay fg:iris)'
+behind = '[⇣\(${count}\)](bg:overlay fg:rose)'
 
 [time]
 disabled = false
-time_format = "%R" # Hour:Minute Format
-style = "bg:#68032f"
-format = '[$time]($style)'
+format = " [](fg:overlay)[ $time 󰴈 ]($style)[](fg:overlay)"
+style = "bg:overlay fg:rose"
+time_format = "%I:%M%P"
+use_12hr = true
 
-#######################
-#   Version control   #
-#######################
-
-
-[git_branch]
-symbol = ""
-style = "bg:#43001D fg:#C37093" # fg:#d1005b
-format = '[](fg:#68032F bg:#43001D)[ $symbol](bg:#43001D fg:#D1005B)[ $branch ]($style)'
-
-[git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
-cherry_pick = '[🍒 PICKING](bg:#43001D fg:bold red)'
-rebase = '[ REBASING](bg:#43001D fg:bold green)'
-merge = '[ MERGING](bg:#43001D fg:bold yellow)'
-bisect = '[🔍 BISECTING](bg:#43001D fg:bold blue)'
-am = '[AM](bg:#43001D fg:bold green)'
-am_or_rebase = '[AM/REBASE](bg:#43001D fg:bold green)'
-revert = '[󰕍 REVERTING](bg:#43001D fg:bold red)'
-
-[git_metrics]
-added_style = "bg:#43001D fg:#00FF00"
-deleted_style = "bg:#43001D fg:#FF0000"
-format = '([+$added ]($added_style))([-$deleted ]($deleted_style))'
+[username]
 disabled = false
+format = "[](fg:overlay)[ 󰧱 $user ]($style)[](fg:overlay) "
+show_always = true
+style_root = "bg:overlay fg:iris"
+style_user = "bg:overlay fg:iris"
 
-[git_status]
-style = "bg:#43001D fg:#8080ff"
-conflicted = '=' # This branch has merge conflicts.
-ahead = ''
-behind = ''
-diverged = '󱡷'
-up_to_date = ''
-untracked = '?'
-stashed = ''
-modified = ''
-staged = ''
-renamed = '»'
-deleted = '✘'
-format = '([($all_status )($ahead_behind )]($style))[](bg:#43001D fg:#68032F)'
-
-[fossil_branch]
-symbol = ""
-
-[hg_branch]
-symbol = ""
-
-[pijul_channel]
-symbol = ""
-
-############################
-#   Contexts (canonical)   #
-############################
-
-[nodejs]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[docker_context]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ (context) ]($style)'
-
-[package]
-format = 'is [$symbol$version]($style) '
-symbol = '📦 '
-version_format = 'v${raw}'
-style = 'bold 208'
-display_private = false
-disabled = false
-
-################
-#   Contexts   #
-################
-
-[aws]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+# Languages
 
 [c]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[conda]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[dart]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [elixir]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [elm]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [golang]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[gradle]
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [haskell]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[haxe]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [java]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [julia]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
-[kotlin]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+[nodejs]
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = "󰎙 "
 
-[lua]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[ocaml]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[perl]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[php]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[python]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[rlang]
-symbol = "󰟔"
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-[ruby]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+[nim]
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = "󰆥 "
 
 [rust]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
 [scala]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
 
-[swift]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
+[python]
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+disabled = false
+symbol = ' '
 
-[zig]
-symbol = ""
-style = "bg:#68032F fg:#D7748C"
-format = '[$symbol](bg:#68032F fg:#F7BCD6)[ ($version) ]($style)'
-
-#############
-#   Other   #
-#############
-
-[nix_shell]
-symbol = ""
-
-[os.symbols]
-Alpaquita = ""
-Alpine = ""
-AlmaLinux = ""
-Amazon = ""
-Android = ""
-Arch = ""
-Artix = ""
-CentOS = ""
-Debian = ""
-DragonFly = ""
-Emscripten = ""
-EndeavourOS = ""
-Fedora = ""
-FreeBSD = ""
-Garuda = "󰛓"
-Gentoo = ""
-HardenedBSD = "󰞌"
-Illumos = "󰈸"
-Kali = ""
-Linux = ""
-Mabox = ""
-Macos = ""
-Manjaro = ""
-Mariner = ""
-MidnightBSD = ""
-Mint = ""
-NetBSD = ""
-NixOS = ""
-OpenBSD = "󰈺"
-openSUSE = ""
-OracleLinux = "󰌷"
-Pop = ""
-Raspbian = ""
-Redhat = ""
-RedHatEnterprise = ""
-RockyLinux = ""
-Redox = "󰀘"
-Solus = "󰠳"
-SUSE = ""
-Ubuntu = ""
-Unknown = ""
-Void = ""
-Windows = "󰍲"
+[conda]
+style = "bg:overlay fg:pine"
+format = " [](fg:overlay)[ $symbol$environment ]($style)[](fg:overlay)"
+disabled = false
+symbol = '🅒 '
