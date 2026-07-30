@@ -69,6 +69,15 @@ tabpad = "·" # Tabs will look like "→···" (depending on tab width)
 cursor-line = "error" # Show inline diagnostics when the cursor is on the line
 other-lines = "disable" # Don't expand diagnostics unless the cursor is on the line
 
+[editor.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
+"'" = "'"
+'`' = '`'
+'<' = '>'
+
 [keys.normal]
 "A-," = "goto_previous_buffer"
 "A-." = "goto_next_buffer"
@@ -84,6 +93,8 @@ other-lines = "disable" # Don't expand diagnostics unless the cursor is on the l
 [keys.select]
 "A-x" = "extend_to_line_bounds"
 "X" = "select_line_above"
+"}" = "goto_next_paragraph"
+"{" = "goto_prev_paragraph"
 
 # [keys.normal."A-r"]
 # Rust compile and run shortcuts
@@ -95,3 +106,6 @@ other-lines = "disable" # Don't expand diagnostics unless the cursor is on the l
 # [keys.normal."A-t"]
 # "v" = ":sh tmux split-window -h"
 # "h" = ":sh tmux split-window -v"
+
+[keys.normal.space]
+l = ":toggle lsp.display-inlay-hints"
