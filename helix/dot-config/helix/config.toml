@@ -1,0 +1,111 @@
+theme = "omarchy"
+
+[editor]
+# show currently open buffers, only when more than one exists.
+bufferline = "multiple"
+# Highlight all lines with a cursor
+cursorline = true
+# Use relative line numbers
+line-number = "relative"
+# Show a ruler at column 120
+rulers = [120]
+# Forse the theme to show colors
+true-color = true
+# Enable mouse usage
+mouse = true
+# Change color for modes
+color-modes = true
+# Minimum severity to show a diagnostic after the end of a line
+end-of-line-diagnostics = "hint"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.lsp]
+# Disable automatically popups of signature parameter help
+auto-signature-help = false
+# Show LSP messages in the status line
+display-messages = true
+
+[editor.file-picker]
+git-global = false
+hidden = false
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["version-control", "diagnostics", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.indent-guides]
+render = true
+character = "╎" # Some characters that work well: "▏", "┆", "┊", "⸽"
+skip-levels = 1
+
+[editor.whitespace]
+render = "all"
+# or control each character
+#[editor.whitespace.render]
+space = "all"
+tab = "all"
+nbsp = "all"
+nnbsp = "all"
+newline = "all"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+nnbsp = "␣"
+tab = "→"
+newline = "⏎"
+tabpad = "·" # Tabs will look like "→···" (depending on tab width)
+
+[editor.inline-diagnostics]
+cursor-line = "error" # Show inline diagnostics when the cursor is on the line
+other-lines = "disable" # Don't expand diagnostics unless the cursor is on the line
+
+[editor.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
+"'" = "'"
+'`' = '`'
+'<' = '>'
+
+[keys.normal]
+"A-," = "goto_previous_buffer"
+"A-." = "goto_next_buffer"
+"A-w" = ":buffer-close"
+"A-/" = "repeat_last_motion"
+"A-x" = "extend_to_line_bounds"
+"X" = "select_line_above"
+# "C-r" = ":config-reload"
+# "C-s" = ":w"
+# "C-j" = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+# "C-k" = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+
+[keys.select]
+"A-x" = "extend_to_line_bounds"
+"X" = "select_line_above"
+"}" = "goto_next_paragraph"
+"{" = "goto_prev_paragraph"
+
+# [keys.normal."A-r"]
+# Rust compile and run shortcuts
+# "b" = ":sh cargo build"
+# "r" = ":sh cargo run"
+# "t" = ":sh cargo test"
+
+# tmux pane settings
+# [keys.normal."A-t"]
+# "v" = ":sh tmux split-window -h"
+# "h" = ":sh tmux split-window -v"
+
+[keys.normal.space]
+l = ":toggle lsp.display-inlay-hints"

@@ -1,0 +1,16 @@
+/* Rose Pine Moon — rofi color variables. */
+
+* {
+    bg:          #232136;
+    fg:          #e0def4;
+    accent:      #c4a7e7;
+    accent-2:    #f6c177;
+    border:      #c4a7e7;
+    urgent:      #eb6f92;
+    selected-fg: #232136;
+    entry-fg:    #ea9a97;
+    prompt-fg:   #9ccfd8;
+    header:      #f6c177;
+
+    background-color: @bg;
+}

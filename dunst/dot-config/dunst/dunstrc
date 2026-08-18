@@ -1,0 +1,104 @@
+[global]
+    # Display
+    monitor = 0
+    follow = keyboard
+    origin = top-right
+    offset = (50, 50)
+    width = 400
+    height = (75, 75)
+    indicate_hidden = yes
+    shrink = no
+    transparency = 0
+    separator_height = 2
+    padding = 12
+    horizontal_padding = 12
+    frame_width = 3
+    separator_color = auto
+    sort = yes
+    idle_threshold = 120
+
+    # Colors
+    # frame_color = "#b3e5fc"
+    background = "#393552"
+    foreground = "#e0def4"
+
+    # Text
+    # font = JetBrainsMono Nerd Font 12
+    font = "FiraCode Nerd Font Medium 12"
+    line_height = 2
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 30
+    word_wrap = yes
+    ellipsize = middle
+    ignore_newline = yes
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = yes
+
+    # Icons
+    icon_position = left
+    min_icon_size = 16
+    max_icon_size = 32
+    enable_recursive_icon_lookup = true
+    icon_theme = "rose-pine-moon"
+
+    # History
+    sticky_history = yes
+    history_length = 20
+
+    # Advanced
+    # dmenu = /usr/bin/dmenu -p dunst:
+    # browser = /usr/bin/brave -new-tab
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+    corner_radius = 2
+    force_xinerama = false
+
+    # Progress bar
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    # Misc
+    notification_limit = 5
+    ignore_dbusclose = false
+
+    # Mouse actions
+    mouse_left_click = close_current
+    mouse_middle_click = do_action
+    mouse_right_click = close_all
+
+    # Keyboard shortcuts
+    close = ctrl+space
+    close_all = ctrl+shift+space
+    history = ctrl+grave
+    context = ctrl+shift+period
+
+[experimental]
+    per_monitor_dpi = false
+
+[urgency_low]
+    background = "#393955"
+    highlight = "#3e8fb0"
+    frame_color = "#3e8fb0"
+    default_icon = "dialog-information"
+    format = "<b><span foreground='#3e8fb0'>%s</span></b>\n%b"
+
+[urgency_normal]
+    background = "#443c53"
+    highlight = "#f6c177"
+    frame_color = "#f6c177"
+    default_icon = "dialog-warning"
+    format = "<b><span foreground='#f6c177'>%s</span></b>\n%b"
+
+[urgency_critical]
+    background = "#433754"
+    highlight = "#eb6f92"
+    frame_color = "#eb6f92"
+    default_icon = "dialog-error"
+    format = "<b><span foreground='#eb6f92'>%s</span></b>\n%b"

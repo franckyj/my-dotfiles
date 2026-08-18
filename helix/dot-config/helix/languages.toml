@@ -1,0 +1,3 @@
+[language-server.omnisharp]
+command = "omnisharp"
+args = ["--languageserver"]
