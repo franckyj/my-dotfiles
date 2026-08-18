@@ -1,4 +1,4 @@
-theme = "rose_pine_moon"
+theme = "omarchy"
 
 [editor]
 # show currently open buffers, only when more than one exists.
@@ -83,7 +83,7 @@ other-lines = "disable" # Don't expand diagnostics unless the cursor is on the l
 "A-." = "goto_next_buffer"
 "A-w" = ":buffer-close"
 "A-/" = "repeat_last_motion"
-"A-"x = "extend_to_line_bounds"
+"A-x" = "extend_to_line_bounds"
 "X" = "select_line_above"
 # "C-r" = ":config-reload"
 # "C-s" = ":w"
