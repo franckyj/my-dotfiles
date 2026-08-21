@@ -1,3 +1,15 @@
+[[language]]
+name = "c-sharp"
+language-servers = ["csharp-ls", "roslyn-language-server"]
+# language-servers = ["roslyn-language-server"]
+
+[language-server.roslyn-language-server]
+command = "roslyn-language-server"
+args = ["--stdio", "--autoLoadProjects"]
+
+[language-server.csharp-ls]
+command = "csharp-ls"
+
 [language-server.omnisharp]
 command = "omnisharp"
 args = ["--languageserver"]
