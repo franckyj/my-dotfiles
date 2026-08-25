@@ -27,16 +27,16 @@ die() { echo -e "${RED}ERROR: $*${NC}" >&2; exit 1; }
 warn() { echo -e "${YELLOW}WARNING: $*${NC}" >&2; }
 msg() { echo -e "${CYAN}$*${NC}"; }
 
-# creating the folders
-mkdir -p $HOME/dev/github/franckyj/{my-nixos,my-dotfiles}
+# install required software
+# dotnet
+apt install git bat helix herdr discord steam pi brave eza zoxide docker atuin
 
-# checkout my-nixos
-msg "Checking out my-nixos..."
-git clone -b feature/remove-hm https://github.com/franckyj/my-nixos.git "$HOME/my-nixos" || die "Failed to checkout my-nixos"
+# creating the folders
+mkdir -p $HOME/dev/github/franckyj/{my-dotfiles}
 
 # checkout my-dotfiles
 msg "Checking out my-dotfiles..."
-git clone -b feature/fix-initial-commit https://github.com/franckyj/my-dotfiles.git "$HOME/my-dotfiles" || die "Failed to checkout my-dotfiles"
+git clone https://github.com/franckyj/my-dotfiles.git "$HOME/my-dotfiles" || die "Failed to checkout my-dotfiles"
 
 # make scripts executable
 find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || true
@@ -45,18 +45,10 @@ find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || tru
 msg "Creating symlinks with stow..."
 
 # create a list of stow packages to install
-stow_packages=("alacritty" "atuin" "dunst" "git" "helix" "oxwm" "picom" "rofi" "starship" "tmux" "wallpapers" "zsh")
+stow_packages("git" "helix" "herdr" "bash")
 for package in "${stow_packages[@]}"; do
     stow -d "$HOME/my-dotfiles" -v -t ~ "$package" --dotfiles || die "Failed to create symlinks with stow - [$package]"
 done
-
-# execute sudo nix-channel --update
-msg "Updating Nix channels..."
-sudo nix-channel --update || die "Failed to update Nix channels"
-
-# rebuild the system configuration
-msg "Rebuilding system configuration..."
-sudo nixos-rebuild switch -I nixos-config=$HOME/my-nixos/configuration.nix --impure || die "Failed to rebuild system configuration"
 
 msg "Installation completed successfully!"
 msg "Reboot your system to apply all changes."

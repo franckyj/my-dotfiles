@@ -1,5 +1,21 @@
-export STARSHIP_CONFIG=~/.config/starship/starship.toml
-eval "$(starship init bash)"
+# Omarchy environment (OMARCHY_PATH + PATH), needed even for non-interactive shells
+[[ -r /usr/share/omarchy/default/bash/env-bootstrap ]] && source /usr/share/omarchy/default/bash/env-bootstrap
+
+# If not running interactively, don't do anything else (leave this above the rc source)
+[[ $- != *i* ]] && return
+
+# All the default Omarchy aliases and functions
+# (don't mess with these directly, just overwrite them here!)
+source "$OMARCHY_PATH/default/bash/rc"
+
+# Add your own exports, aliases, and functions here.
+#
+# Make an alias for invoking commands you use constantly
+# alias p='python'
+alias hx="helix"
+
+# export STARSHIP_CONFIG=~/.config/starship/starship.toml
+# eval "$(starship init bash)"
 
 alias la=tree
 alias cat=bat
@@ -13,20 +29,20 @@ alias gst="git status"
 alias glog="git log --graph --topo-order --pretty='%w(100,0,6)%C(yellow)%h%C(bold)%C(black)%d %C(cyan)%ar %C(green)%an%n%C(bold)%C(white)%s %N' --abbrev-commit"
 alias gdiff="git diff"
 alias gco="git checkout"
-alias gb='git branch'
-alias gba='git branch -a'
-alias gadd='git add'
-alias ga='git add -p'
-alias gcoall='git checkout -- .'
-alias gr='git remote'
-alias gre='git reset'
+alias gb="git branch"
+alias gba="git branch -a"
+alias gadd="git add"
+alias ga="git add -p"
+alias gcoall="git checkout -- ."
+alias gr="git remote"
+alias gre="git reset"
 
 # Docker
-alias dco="docker compose"
-alias dps="docker ps"
-alias dpa="docker ps -a"
-alias dl="docker ps -l -q"
-alias dx="docker exec -it"
+# alias dco="docker compose"
+# alias dps="docker ps"
+# alias dpa="docker ps -a"
+# alias dl="docker ps -l -q"
+# alias dx="docker exec -it"
 
 # Dirs
 alias ..="cd .."
@@ -35,7 +51,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
-alias cl='clear'
+alias cl="clear"
 
 # Eza
 alias l="eza -l --icons --git -a"
@@ -43,3 +59,6 @@ alias lt="eza --tree --level=2 --long --icons --git"
 alias ltree="eza --tree --level=2  --icons --git"
 
 eval "$(zoxide init bash)"
+
+export EDITOR="helix"
+export PATH=$PATH:~/.dotnet/tools
