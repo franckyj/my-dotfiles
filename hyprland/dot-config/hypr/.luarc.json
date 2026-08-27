@@ -1,0 +1,10 @@
+{
+  "workspace": {
+    "library": [
+      "/home/zibbble/.config/hypr"
+    ]
+  },
+  "diagnostics": {
+    "globals": ["hl"]
+  }
+}
