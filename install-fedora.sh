@@ -410,13 +410,8 @@ install_development_runtimes() {
     # Make mise available to this non-interactive shell.
     eval "$(mise activate bash)"
 
-    local runtimes=(
-        dotnet@10                          # .NET 10 SDK
-    )
-
-    for runtime in "${runtimes[@]}"; do
-        mise use --global "$runtime"
-    done
+    # will use the ~/.config/mise/config.toml file to install the runtimes
+    mise install
 }
 
 
@@ -478,19 +473,6 @@ install_herdr() {
 
     local installers=(
         "https://herdr.dev/install.sh"     # Herdr installation script
-    )
-
-    for installer in "${installers[@]}"; do
-        curl -fsSL "$installer" | sh
-    done
-}
-
-
-install_pi() {
-    msg "installing pi"
-
-    local installers=(
-        "https://pi.dev/install.sh"        # pi installation script
     )
 
     for installer in "${installers[@]}"; do
@@ -593,7 +575,6 @@ install_dotfiles() {
 
     local stow_packages=(
         foot                              # Foot terminal configuration
-        gh                                # GitHub CLI configuration
         git                               # Git configuration
         helix                             # Helix editor configuration
         herdr                             # Herdr configuration
@@ -657,14 +638,12 @@ main() {
 
     install_development_tools
     install_lazygit
-    install_development_runtimes
 
     install_foot
     install_brave
     install_fonts
     install_noctalia
     install_herdr
-    install_pi
 
     configure_flatpak
     install_flatpak_apps
@@ -672,6 +651,8 @@ main() {
     checkout_dotfiles
     make_scripts_executable
     install_dotfiles
+
+    install_development_runtimes
 
     enable_ssd_trim
 
