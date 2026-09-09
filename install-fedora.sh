@@ -1,219 +1,686 @@
 #!/usr/bin/env bash
-# from https://codeberg.org/justaguylinux/oxwm-setup/src/branch/main/install.sh
+#
+# Fedora 44 + Hyprland + Noctalia v5 post-install setup
+#
+# Based on:
+# https://codeberg.org/justaguylinux/oxwm-setup/src/branch/main/install.sh
+#
 
-# fail immediately if any command fails
 set -euo pipefail
 
-# if [[ $EUID -eq 0 ]]; then
-#     die "Do not run this script as root."
-# fi
 
-# if ! command -v sudo >/dev/null 2>&1; then
-#     die "sudo is required."
-# fi
+# ─────────────────────────────────────────────────────────────────────────────
+# Configuration
+# ─────────────────────────────────────────────────────────────────────────────
 
-# colors
+readonly FEDORA_VERSION="44"
+readonly DOTFILES_DIR="$HOME/dev/github/franckyj/my-dotfiles"
+readonly LOG_FILE="$HOME/fedora-install.log"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Colors
+# ─────────────────────────────────────────────────────────────────────────────
+
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-die() { echo -e "${RED}ERROR: $*${NC}" >&2; exit 1; }
-warn() { echo -e "${YELLOW}WARNING: $*${NC}" >&2; }
-msg() { echo -e "${CYAN}$*${NC}"; }
 
-msg "──────────────────────────────────────────"
-msg " Fedora 44 Post-Install Setup"
-msg "──────────────────────────────────────────"
+# ─────────────────────────────────────────────────────────────────────────────
+# Output helpers
+# ─────────────────────────────────────────────────────────────────────────────
 
-# paths
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# TEMP_DIR="/tmp/oxwm_$$"
-LOG_FILE="$HOME/fedora-install.log"
-
-# logging function
-exec > >(tee -a "$LOG_FILE") 2>&1
-
-# cleanup function to remove temporary files
-# trap "rm -rf $TEMP_DIR" EXIT
-
-msg "add settings to the /etc/dnf/dnf.conf file"
-grep -q 'max_parallel_downloads' /etc/dnf/dnf.conf || {
-  echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
-  echo 'fastestmirror=True'        | sudo tee -a /etc/dnf/dnf.conf
-  # echo 'defaultyes=True'           | sudo tee -a /etc/dnf/dnf.conf
-  echo 'keepcache=True'            | sudo tee -a /etc/dnf/dnf.conf
+die() {
+    echo -e "${RED}ERROR: $*${NC}" >&2
+    exit 1
 }
 
-msg "update the system"
-sudo dnf upgrade --refresh -y
+warn() {
+    echo -e "${YELLOW}WARNING: $*${NC}" >&2
+}
 
-sudo dnf install -y dnf-plugins-core
+msg() {
+    echo -e "${CYAN}$*${NC}"
+}
 
-msg "update the firmware"
-sudo fwupdmgr refresh
-sudo fwupdmgr get-devices
-sudo fwupdmgr get-updates
-# sudo fwupdmgr update
+success() {
+    echo -e "${GREEN}$*${NC}"
+}
 
-msg "enable RPM fusion"
-sudo dnf install -y \
-  https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
-# run these to analyze the boot time and optimze afterward
-# total boot time breakdown
-# systemd-analyze
-# ranked list of services by startup time
-# systemd-analyze blame
-# systemd-analyze blame | head -15
-# msg "optimize boot time"
-# sudo systemctl disable NetworkManager-wait-online.service
-# sudo systemctl disable plymouth-quit-wait.service
+# ─────────────────────────────────────────────────────────────────────────────
+# Generic installation helpers
+# ─────────────────────────────────────────────────────────────────────────────
 
-msg "install lionheartp copr for hyprland"
-sudo dnf copr enable lionheartp/Hyprland
+install_packages() {
+    sudo dnf install -y "$@"
+}
 
-msg "install ffmpeg"
-sudo dnf install -y \
-    ffmpeg \
-    ffmpeg-libs libva libva-utils \
-    intel-media-driver
+install_flatpak() {
+    flatpak install -y flathub "$1"
+}
 
-msg "install multimedia codecs"
-sudo dnf4 group install multimedia
-sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin # installs gstreamer components. Required if you use Gnome Videos and other dependent applications.
-sudo dnf group install -y sound-and-video # installs useful Sound and Video complementary packages.
+enable_coprs() {
+    local coprs=("$@")
 
-msg "swap old for new drivers"
-sudo dnf swap ffmpeg-free ffmpeg --allowerasing # switch to full FFMPEG.
-sudo dnf swap libva-intel-media-driver intel-media-driver --allowerasing
+    for copr in "${coprs[@]}"; do
+        sudo dnf copr enable -y "$copr"
+    done
+}
 
-# here
-if lspci | grep -qi 'Intel.*VGA\|Intel.*Display'; then
-    sudo dnf install -y intel-media-driver
-fi
 
-sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
-sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+# ─────────────────────────────────────────────────────────────────────────────
+# Environment
+# ─────────────────────────────────────────────────────────────────────────────
 
-msg "install sound codecs"
-sudo dnf install -y libfreeaptx libldac fdk-aac
+check_environment() {
+    msg "checking environment"
 
-msg "install basic utilities (git, curl, etc.)"
-sudo dnf install -y git curl wget unzip p7zip p7zip-plugins
+    if [[ $EUID -eq 0 ]]; then
+        die "Do not run this script as root."
+    fi
 
-# msg "install docker"
-# curl -fsSL https://get.docker.com | sudo sh
-# sudo systemctl enable --now docker
-# sudo usermod -aG docker $USER
+    if ! command -v sudo >/dev/null 2>&1; then
+        die "sudo is required."
+    fi
 
-msg "install Hyprland and Wayland utilities"
+    if [[ ! -f /etc/fedora-release ]]; then
+        die "This script is intended for Fedora."
+    fi
 
-# no hyprpaper since noctalia
-sudo dnf install -y \
-  hyprland \
-  hyprlock \
-  hypridle \
-  xdg-desktop-portal \
-  xdg-desktop-portal-hyprland \
-  xdg-desktop-portal-gtk \
-  wl-clipboard \
-  brightnessctl \
-  pipewire \
-  wireplumber \
-  playerctl \
-  pavucontrol \
-  qt5-wayland \
-  qt6-wayland
+    local detected_version
+    detected_version="$(rpm -E %fedora)"
 
-msg "install zsh"
-# msg "install zsh with oh-my-zsh"
-sudo dnf install -y zsh
-chsh -s "$(command -v zsh)"
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    if [[ "$detected_version" != "$FEDORA_VERSION" ]]; then
+        warn "This script was written for Fedora ${FEDORA_VERSION}, but Fedora ${detected_version} was detected."
+    fi
 
-msg "install foot"
-sudo dnf install -y foot
+    sudo -v
+}
 
-msg "install starship"
-curl -sS https://starship.rs/install.sh | sh
 
-msg "install atuin"
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-# atuin register -u $USER -e you@example.com   # optional, for sync
+# ─────────────────────────────────────────────────────────────────────────────
+# DNF
+# ─────────────────────────────────────────────────────────────────────────────
 
-msg "install a bunch of tools to replace old commands (eza, bat, ripgrep, helix, etc.)"
-sudo dnf install -y eza bat ripgrep fd-find zoxide fzf btop htop iotop-c \
-  nvtop du-dust duf ncdu fastfetch git-delta jq yq gh tldr neovim helix \
-  yazi mise
-# lazygit lives in a Copr (not the default Fedora repos):
-sudo dnf copr enable -y atim/lazygit
-sudo dnf install -y lazygit
+configure_dnf() {
+    msg "configuring DNF"
 
-msg "install brave browser"
-sudo dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-sudo dnf install -y brave-browser
+    local dnf_conf="/etc/dnf/dnf.conf"
 
-msg "install some coding fonts"
-sudo dnf install -y \
-  jetbrains-mono-fonts cascadia-code-fonts fira-code-fonts \
-  google-noto-sans-fonts google-noto-serif-fonts google-noto-emoji-fonts \
-  adobe-source-code-pro-fonts liberation-fonts
+    local settings=(
+        "max_parallel_downloads=10"    # Download multiple packages in parallel
+        "fastestmirror=True"            # Prefer faster mirrors
+        "keepcache=True"                # Keep downloaded packages in the cache
+    )
 
-msg "add flatpak repo"
-sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-sudo flatpak remotes
-sudo flatpak update
+    for setting in "${settings[@]}"; do
+        local key="${setting%%=*}"
 
-msg "steam via Flathub — better sandboxing and more consistent library support"
-flatpak install -y flathub com.valvesoftware.Steam
+        if ! grep -q "^${key}=" "$dnf_conf"; then
+            echo "$setting" | sudo tee -a "$dnf_conf" >/dev/null
+        fi
+    done
+}
 
-msg "install discord"
-flatpak install -y flathub com.discordapp.Discord
 
-msg "install herdr"
-curl -fsSL https://herdr.dev/install.sh | sh
+update_system() {
+    msg "updating system"
 
-msg "install pi"
-curl -fsSL https://pi.dev/install.sh | sh
+    sudo dnf upgrade --refresh -y
 
-msg "install noctalia"
-sudo dnf install -y noctalia-git
+    local packages=(
+        dnf-plugins-core                # DNF plugins such as COPR and repository management
+    )
 
-msg "install stow"
-sudo dnf install -y stow
+    install_packages "${packages[@]}"
+}
 
-msg "creating the dotfiles folder"
-mkdir -p $HOME/dev/github/franckyj/{my-dotfiles}
 
-msg "checkout my-dotfiles"
-if [[ -d "$HOME/dev/github/franckyj/my-dotfiles/.git" ]]; then
-    git -C "$HOME/dev/github/franckyj/my-dotfiles" pull --ff-only
-else
-    git clone https://github.com/franckyj/my-dotfiles.git "$HOME/dev/github/franckyj/my-dotfiles" || die "Failed to checkout my-dotfiles"
-fi
+# ─────────────────────────────────────────────────────────────────────────────
+# Firmware
+# ─────────────────────────────────────────────────────────────────────────────
 
-msg "make scripts executable"
-find "$HOME/my-dotfiles/scripts" -type f -exec chmod +x {} \; 2>/dev/null || true
+update_firmware() {
+    msg "checking firmware updates"
 
-msg "create symlinks with stow"
+    sudo fwupdmgr refresh
+    sudo fwupdmgr get-devices
+    sudo fwupdmgr get-updates
 
-# create a list of stow packages to install
-stow_packages=("foot" "gh" "git" "helix" "herdr" "hyprland" "mise" "starship" "zsh")
-for package in "${stow_packages[@]}"; do
-    stow -d "$HOME/my-dotfiles" -v -t ~ "$package" --dotfiles || die "Failed to create symlinks with stow - [$package]"
-done
+    warn "firmware will not be updated automatically."
+    warn "run 'sudo fwupdmgr update' after reboot if updates are available."
+}
 
-msg "enable SSD trim"
-sudo systemctl enable --now fstrim.timer
 
-msg "installation completed successfully!"
-msg "reboot your system to apply all changes."
+# ─────────────────────────────────────────────────────────────────────────────
+# RPM Fusion
+# ─────────────────────────────────────────────────────────────────────────────
 
-# sudo dnf autoremove
-warn "you can run `sudo fwupdmgr update` after the reboot to update the firmware"
+enable_rpmfusion() {
+    msg "enabling RPM Fusion"
 
-# look at https://github.com/R7rainz/dotfiles/tree/master/.config for dotfiles
+    local repositories=(
+        "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"     # RPM Fusion Free repository
+        "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" # RPM Fusion Nonfree repository
+    )
+
+    install_packages "${repositories[@]}"
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Hyprland / Wayland
+# ─────────────────────────────────────────────────────────────────────────────
+
+enable_hyprland_copr() {
+    msg "enabling Hyprland COPR"
+
+    local coprs=(
+        lionheartp/Hyprland             # Hyprland COPR repository
+    )
+
+    enable_coprs "${coprs[@]}"
+}
+
+
+install_hyprland() {
+    msg "installing Hyprland and Wayland utilities"
+
+    local packages=(
+        hyprland                        # Wayland compositor
+        hyprlock                         # Screen locker for Hyprland
+        hypridle                         # Idle daemon for Hyprland
+        hyprpolkitagent                  # Polkit authentication agent
+        xdg-desktop-portal               # Desktop integration portal framework
+        xdg-desktop-portal-hyprland      # Hyprland XDG portal backend
+        xdg-desktop-portal-gtk           # GTK XDG portal backend
+        wl-clipboard                     # Wayland clipboard utilities
+        brightnessctl                     # Display/backlight brightness control
+        pipewire                          # Audio/video multimedia server
+        wireplumber                       # PipeWire session/policy manager
+        playerctl                         # MPRIS media player controller
+        pavucontrol                       # GUI audio mixer
+        qt5-wayland                       # Qt 5 Wayland platform support
+        qt6-wayland                       # Qt 6 Wayland platform support
+    )
+
+    install_packages "${packages[@]}"
+
+    # No hyprpaper:
+    # Noctalia provides wallpaper management.
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Multimedia
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_multimedia() {
+    msg "installing multimedia support"
+
+    local packages=(
+        ffmpeg                           # Audio/video encoding and decoding
+        ffmpeg-libs                      # FFmpeg runtime libraries
+        libva                             # Video Acceleration API
+        libva-utils                        # VA-API diagnostic utilities
+        libfreeaptx                        # aptX Bluetooth audio codec
+        libldac                            # LDAC Bluetooth audio codec
+        fdk-aac                            # AAC audio encoder
+    )
+
+    install_packages "${packages[@]}"
+
+    sudo dnf4 group install -y multimedia
+
+    sudo dnf update @multimedia \
+        --setopt="install_weak_deps=False" \
+        --exclude=PackageKit-gstreamer-plugin
+
+    sudo dnf group install -y sound-and-video
+
+    sudo dnf swap ffmpeg-free ffmpeg --allowerasing
+}
+
+
+install_intel_media_driver() {
+    if lspci | grep -qi 'Intel.*VGA\|Intel.*Display'; then
+        msg "Intel graphics detected; installing Intel media driver"
+
+        local packages=(
+            intel-media-driver                # Intel hardware video acceleration driver
+        )
+
+        install_packages "${packages[@]}"
+
+        sudo dnf swap \
+            libva-intel-media-driver \
+            intel-media-driver \
+            --allowerasing
+    else
+        msg "Intel graphics not detected; skipping Intel media driver"
+    fi
+}
+
+
+install_freeworld_drivers() {
+    msg "installing Mesa Freeworld drivers"
+
+    sudo dnf swap \
+        mesa-va-drivers \
+        mesa-va-drivers-freeworld \
+        --allowerasing
+
+    sudo dnf swap \
+        mesa-vdpau-drivers \
+        mesa-vdpau-drivers-freeworld \
+        --allowerasing
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Basic utilities
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_basic_utilities() {
+    msg "installing basic utilities"
+
+    local packages=(
+        git                               # Distributed version control
+        curl                              # Transfer data from URLs
+        wget                              # Download files from the web
+        unzip                             # Extract ZIP archives
+        p7zip                             # 7-Zip archive support
+        p7zip-plugins                     # Additional 7-Zip archive formats
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Shell
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_shell() {
+    msg "installing Zsh"
+
+    local packages=(
+        zsh                               # Z shell
+    )
+
+    install_packages "${packages[@]}"
+
+    local zsh_path
+    zsh_path="$(command -v zsh)"
+
+    if [[ "$SHELL" != "$zsh_path" ]]; then
+        chsh -s "$zsh_path"
+    fi
+}
+
+
+install_starship() {
+    msg "installing Starship"
+
+    curl -sS https://starship.rs/install.sh | sh
+}
+
+
+install_atuin() {
+    msg "installing Atuin"
+
+    curl \
+        --proto '=https' \
+        --tlsv1.2 \
+        -LsSf https://setup.atuin.sh \
+        | sh
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Development tools
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_development_tools() {
+    msg "installing command-line development tools"
+
+    local packages=(
+        eza                               # Modern replacement for ls
+        bat                               # cat with syntax highlighting and paging
+        ripgrep                           # Fast replacement for grep
+        fd-find                           # Fast replacement for find
+        zoxide                            # Smarter replacement for cd
+        fzf                               # Interactive fuzzy finder
+        btop                              # Interactive resource monitor
+        htop                              # Interactive process viewer
+        iotop-c                           # Monitor disk I/O by process
+        nvtop                             # GPU monitoring tool
+        du-dust                           # Modern replacement for du
+        duf                               # Modern replacement for df
+        ncdu                              # Interactive disk usage analyzer
+        fastfetch                         # System information display
+        git-delta                         # Syntax-highlighted Git diff viewer
+        jq                                # JSON command-line processor
+        yq                                # YAML/JSON/XML command-line processor
+        gh                                # GitHub CLI
+        tldr                              # Simplified command-line documentation
+        neovim                            # Vim-based text editor
+        helix                             # Modal terminal text editor
+        yazi                              # Terminal file manager
+        mise                              # Development tool/version manager
+        stow                              # Symlink manager for dotfiles
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+install_lazygit() {
+    msg "installing Lazygit"
+
+    local coprs=(
+        atim/lazygit                       # Lazygit COPR repository
+    )
+
+    enable_coprs "${coprs[@]}"
+
+    local packages=(
+        lazygit                            # Terminal UI for Git
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Development runtimes
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_development_runtimes() {
+    msg "installing development runtimes through mise"
+
+    if ! command -v mise >/dev/null 2>&1; then
+        die "mise is not available in PATH"
+    fi
+
+    # Make mise available to this non-interactive shell.
+    eval "$(mise activate bash)"
+
+    local runtimes=(
+        dotnet@10                          # .NET 10 SDK
+    )
+
+    for runtime in "${runtimes[@]}"; do
+        mise use --global "$runtime"
+    done
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Applications
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_foot() {
+    msg "installing Foot terminal"
+
+    local packages=(
+        foot                               # Lightweight Wayland terminal emulator
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+install_brave() {
+    msg "installing Brave browser"
+
+    local repositories=(
+        "https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo" # Brave DNF repository
+    )
+
+    for repository in "${repositories[@]}"; do
+        sudo dnf config-manager addrepo --from-repofile="$repository"
+    done
+
+    local keys=(
+        "https://brave-browser-rpm-release.s3.brave.com/brave-core.asc"    # Brave repository signing key
+    )
+
+    for key in "${keys[@]}"; do
+        sudo rpm --import "$key"
+    done
+
+    local packages=(
+        brave-browser                      # Chromium-based web browser
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+install_noctalia() {
+    msg "installing Noctalia"
+
+    local packages=(
+        noctalia-git                       # Wayland desktop shell
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+install_herdr() {
+    msg "installing Herdr"
+
+    local installers=(
+        "https://herdr.dev/install.sh"     # Herdr installation script
+    )
+
+    for installer in "${installers[@]}"; do
+        curl -fsSL "$installer" | sh
+    done
+}
+
+
+install_pi() {
+    msg "installing pi"
+
+    local installers=(
+        "https://pi.dev/install.sh"        # pi installation script
+    )
+
+    for installer in "${installers[@]}"; do
+        curl -fsSL "$installer" | sh
+    done
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Fonts
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_fonts() {
+    msg "installing fonts"
+
+    local packages=(
+        jetbrains-mono-fonts               # Monospaced programming font
+        cascadia-code-fonts                # Microsoft's programming font
+        fira-code-fonts                    # Programming font with ligatures
+        google-noto-sans-fonts             # General-purpose sans-serif font
+        google-noto-serif-fonts            # General-purpose serif font
+        google-noto-emoji-fonts            # Unicode emoji font
+        adobe-source-code-pro-fonts        # Monospaced programming font
+        liberation-fonts                   # Metric-compatible replacement fonts
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Flatpak
+# ─────────────────────────────────────────────────────────────────────────────
+
+configure_flatpak() {
+    msg "configuring Flathub"
+
+    local remotes=(
+        "https://dl.flathub.org/repo/flathub.flatpakrepo" # Flathub repository
+    )
+
+    for remote in "${remotes[@]}"; do
+        sudo flatpak remote-add \
+            --if-not-exists \
+            flathub \
+            "$remote"
+    done
+
+    sudo flatpak update -y
+}
+
+
+install_flatpak_apps() {
+    msg "installing Flatpak applications"
+
+    local apps=(
+        com.valvesoftware.Steam              # Steam gaming client
+        com.discordapp.Discord               # Discord chat application
+    )
+
+    for app in "${apps[@]}"; do
+        install_flatpak "$app"
+    done
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Dotfiles
+# ─────────────────────────────────────────────────────────────────────────────
+
+checkout_dotfiles() {
+    msg "checking out dotfiles"
+
+    mkdir -p "$(dirname "$DOTFILES_DIR")"
+
+    if [[ -d "$DOTFILES_DIR/.git" ]]; then
+        git -C "$DOTFILES_DIR" pull --ff-only
+    else
+        git clone \
+            https://github.com/franckyj/my-dotfiles.git \
+            "$DOTFILES_DIR" ||
+            die "Failed to checkout my-dotfiles"
+    fi
+}
+
+
+make_scripts_executable() {
+    msg "making dotfiles scripts executable"
+
+    if [[ -d "$DOTFILES_DIR/scripts" ]]; then
+        find "$DOTFILES_DIR/scripts" \
+            -type f \
+            -exec chmod +x {} \;
+    fi
+}
+
+
+install_dotfiles() {
+    msg "creating dotfile symlinks with Stow"
+
+    local stow_packages=(
+        foot                              # Foot terminal configuration
+        gh                                # GitHub CLI configuration
+        git                               # Git configuration
+        helix                             # Helix editor configuration
+        herdr                             # Herdr configuration
+        hyprland                          # Hyprland configuration
+        mise                              # mise configuration
+        starship                          # Starship prompt configuration
+        zsh                               # Zsh configuration
+    )
+
+    for package in "${stow_packages[@]}"; do
+        stow \
+            -d "$DOTFILES_DIR" \
+            -v \
+            -t "$HOME" \
+            "$package" \
+            --dotfiles ||
+            die "Failed to create symlinks with Stow - [$package]"
+    done
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# System services
+# ─────────────────────────────────────────────────────────────────────────────
+
+enable_ssd_trim() {
+    msg "enabling SSD TRIM"
+
+    sudo systemctl enable --now fstrim.timer
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Main
+# ─────────────────────────────────────────────────────────────────────────────
+
+main() {
+    msg "──────────────────────────────────────────"
+    msg " Fedora 44 Post-Install Setup"
+    msg "──────────────────────────────────────────"
+
+    check_environment
+
+    configure_dnf
+    update_system
+    enable_rpmfusion
+    update_firmware
+
+    enable_hyprland_copr
+    install_hyprland
+
+    install_multimedia
+    install_intel_media_driver
+    # install_freeworld_drivers
+
+    install_basic_utilities
+
+    install_shell
+    install_starship
+    install_atuin
+
+    install_development_tools
+    install_lazygit
+    install_development_runtimes
+
+    install_foot
+    install_brave
+    install_fonts
+    install_noctalia
+    install_herdr
+    install_pi
+
+    configure_flatpak
+    install_flatpak_apps
+
+    checkout_dotfiles
+    make_scripts_executable
+    install_dotfiles
+
+    enable_ssd_trim
+
+    success "──────────────────────────────────────────"
+    success " Installation completed successfully!"
+    success " Installation completed successfully!"
+    success "──────────────────────────────────────────"
+
+    msg "Reboot your system to apply all changes."
+}
+
+main "$@"
