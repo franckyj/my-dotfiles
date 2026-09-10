@@ -192,7 +192,6 @@ install_hyprland() {
 
     local packages=(
         hyprland                        # Wayland compositor
-        hyprlock                         # Screen locker for Hyprland
         hypridle                         # Idle daemon for Hyprland
         hyprpolkitagent                  # Polkit authentication agent
         xdg-desktop-portal               # Desktop integration portal framework
