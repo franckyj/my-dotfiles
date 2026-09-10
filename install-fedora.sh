@@ -596,6 +596,29 @@ install_dotfiles() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Wallpapers
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_wallpapers() {
+    msg "checking out wallpapers from MyLinuxForWork"
+
+    local wallpapers="$HOME/Pictures/Wallpapers"
+
+    mkdir -p "$HOME/Pictures"
+
+    if [[ -d "$wallpapers/.git" ]]; then
+        git -C "$wallpapers" pull --ff-only
+    elif [[ -e "$wallpapers" ]]; then
+        warn "$wallpapers already exists and is not a Git repository; skipping wallpaper installation"
+    else
+        git clone \
+            https://github.com/mylinuxforwork/wallpaper.git \
+            "$wallpapers"
+    fi
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # System services
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -652,6 +675,8 @@ main() {
     install_dotfiles
 
     install_development_runtimes
+
+    install_wallpapers
 
     enable_ssd_trim
 
