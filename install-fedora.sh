@@ -238,9 +238,9 @@ install_multimedia() {
 
     sudo dnf4 group install -y multimedia
 
-    #sudo dnf update @multimedia \
-    #    --setopt="install_weak_deps=False" \
-    #    --exclude=PackageKit-gstreamer-plugin
+    sudo dnf4 update @multimedia \
+        --setopt="install_weak_deps=False" \
+        --exclude=PackageKit-gstreamer-plugin
 
     sudo dnf group install -y sound-and-video
 
