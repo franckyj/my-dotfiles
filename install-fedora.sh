@@ -172,12 +172,32 @@ enable_rpmfusion() {
 }
 
 
-enable_copr() {
-    msg "enabling COPR"
+enable_hyprland_copr() {
+    msg "enabling Hyprland COPR"
 
     local coprs=(
         lionheartp/Hyprland             # Hyprland COPR repository
+    )
+
+    enable_coprs "${coprs[@]}"
+}
+
+
+enable_yazi_copr() {
+    msg "enabling Yazi COPR"
+
+    local coprs=(
         lihaohong/yazi                  # Yazi COPR repository
+    )
+
+    enable_coprs "${coprs[@]}"
+}
+
+
+enable_mise_copr() {
+    msg "enabling Mise COPR"
+
+    local coprs=(
         jdxcode/mise                    # Mise COPR repository
     )
 
@@ -373,10 +393,12 @@ install_development_tools() {
         tldr                              # Simplified command-line documentation
         neovim                            # Vim-based text editor
         helix                             # Modal terminal text editor
+        lua                               # Lua runtime for Hyprland config validation
         yazi                              # Terminal file manager
         mise                              # Development tool/version manager
         stow                              # Symlink manager for dotfiles
         flatpak                           # Application deployment framework
+        direnv                            # Environment variables management
     )
 
     install_packages "${packages[@]}"
@@ -434,6 +456,17 @@ install_foot() {
 }
 
 
+install_thunar() {
+    msg "installing Thunar file manager"
+
+    local packages=(
+        thunar                             # File manager for Xfce/GTK desktops
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
 install_brave() {
     msg "installing Brave browser"
 
@@ -462,10 +495,24 @@ install_brave() {
 
 
 install_noctalia() {
-    msg "installing Noctalia"
+:    msg "installing Noctalia"
 
     local packages=(
         noctalia-git                       # Wayland desktop shell
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
+install_noctalia_greeter() {
+    msg "Installing Noctalia Greeter"
+
+    sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+
+    local packages=(
+        greetd
+        noctalia-greeter
     )
 
     install_packages "${packages[@]}"
@@ -634,6 +681,13 @@ enable_ssd_trim() {
 }
 
 
+enable_graphical_login() {
+    msg "enabling graphical login"
+
+    sudo systemctl set-default graphical.target
+}
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
@@ -650,7 +704,7 @@ main() {
     enable_rpmfusion
     update_firmware
 
-    enable_copr
+    enable_hyprland_copr
     install_hyprland
 
     install_multimedia
@@ -663,10 +717,13 @@ main() {
     install_starship
     install_atuin
 
+    enable_yazi_copr
+    enable_mise_copr
     install_development_tools
     install_lazygit
 
     install_foot
+    install_thunar
     install_brave
     install_fonts
     install_noctalia
@@ -684,6 +741,7 @@ main() {
     install_wallpapers
 
     enable_ssd_trim
+    enable_graphical_login
 
     success "──────────────────────────────────────────"
     success " Installation completed successfully!"

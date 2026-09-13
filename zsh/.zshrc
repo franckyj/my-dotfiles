@@ -23,7 +23,10 @@ export STARSHIP_CONFIG=~/.config/starship/starship.toml
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
-export EDITOR=hx
+export BROWSER="brave-browser"
+export EDITOR="hx"
+export VISUAL="hx"
+export FILEMANAGER="thunar"
 
 alias la=tree
 alias cat=bat
@@ -96,26 +99,18 @@ alias ltree="eza --tree --level=2  --icons --git"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Nix!
-# export NIX_CONF_DIR=$HOME/.config/nix
-export NIX_PATH="nixos-config=$HOME/nixos-dotfiles/configuration.nix"
-
 # navigation
 cx() { cd "$@" && l; }
 fcd() { cd "$(find . -type d -not -path '*/.*' | fzf)" && l; }
 f() { echo "$(find . -type f -not -path '*/.*' | fzf)" | pbcopy }
 fv() { nvim "$(find . -type f -not -path '*/.*' | fzf)" }
 
- # Nix
- if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
- fi
- # End Nix
-
 # atuin
 export ATUIN_CONFIG_DIR="/home/zibbble/.config/atuin"
 
 export XDG_CONFIG_HOME="/home/zibbble/.config"
+
+xdg-mime default thunar.desktop inode/directory
 
 eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
