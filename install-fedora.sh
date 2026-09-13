@@ -147,9 +147,9 @@ update_system() {
 update_firmware() {
     msg "checking firmware updates"
 
-    sudo fwupdmgr refresh
-    sudo fwupdmgr get-devices
-    sudo fwupdmgr get-updates
+    #sudo fwupdmgr refresh
+    #sudo fwupdmgr get-devices
+    #sudo fwupdmgr get-updates
 
     warn "firmware will not be updated automatically."
     warn "run 'sudo fwupdmgr update' after reboot if updates are available."
@@ -172,19 +172,21 @@ enable_rpmfusion() {
 }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Hyprland / Wayland
-# ─────────────────────────────────────────────────────────────────────────────
-
-enable_hyprland_copr() {
-    msg "enabling Hyprland COPR"
+enable_copr() {
+    msg "enabling COPR"
 
     local coprs=(
         lionheartp/Hyprland             # Hyprland COPR repository
+        lihaohong/yazi                  # Yazi COPR repository
+        jdxcode/mise                    # Mise COPR repository
     )
 
     enable_coprs "${coprs[@]}"
 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Hyprland / Wayland
+# ─────────────────────────────────────────────────────────────────────────────
 
 
 install_hyprland() {
@@ -192,6 +194,7 @@ install_hyprland() {
 
     local packages=(
         hyprland                        # Wayland compositor
+        hyprland-guiutils                # Hyprland GUI Utilities
         hypridle                         # Idle daemon for Hyprland
         hyprpolkitagent                  # Polkit authentication agent
         xdg-desktop-portal               # Desktop integration portal framework
@@ -203,8 +206,8 @@ install_hyprland() {
         wireplumber                       # PipeWire session/policy manager
         playerctl                         # MPRIS media player controller
         pavucontrol                       # GUI audio mixer
-        qt5-wayland                       # Qt 5 Wayland platform support
-        qt6-wayland                       # Qt 6 Wayland platform support
+        qt5-qtwayland                     # Qt 5 Wayland platform support
+        qt6-qtwayland                     # Qt 6 Wayland platform support
     )
 
     install_packages "${packages[@]}"
@@ -235,9 +238,9 @@ install_multimedia() {
 
     sudo dnf4 group install -y multimedia
 
-    sudo dnf update @multimedia \
-        --setopt="install_weak_deps=False" \
-        --exclude=PackageKit-gstreamer-plugin
+    #sudo dnf update @multimedia \
+    #    --setopt="install_weak_deps=False" \
+    #    --exclude=PackageKit-gstreamer-plugin
 
     sudo dnf group install -y sound-and-video
 
@@ -294,6 +297,7 @@ install_basic_utilities() {
         unzip                             # Extract ZIP archives
         p7zip                             # 7-Zip archive support
         p7zip-plugins                     # Additional 7-Zip archive formats
+        tar                               # Another zip utility
     )
 
     install_packages "${packages[@]}"
@@ -372,6 +376,7 @@ install_development_tools() {
         yazi                              # Terminal file manager
         mise                              # Development tool/version manager
         stow                              # Symlink manager for dotfiles
+        flatpak                           # Application deployment framework
     )
 
     install_packages "${packages[@]}"
@@ -645,7 +650,7 @@ main() {
     enable_rpmfusion
     update_firmware
 
-    enable_hyprland_copr
+    enable_copr
     install_hyprland
 
     install_multimedia
