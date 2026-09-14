@@ -631,6 +631,7 @@ install_dotfiles() {
         herdr                             # Herdr configuration
         hyprland                          # Hyprland configuration
         mise                              # mise configuration
+        noctalia                          # Noctalia configuration
         starship                          # Starship prompt configuration
         zsh                               # Zsh configuration
     )

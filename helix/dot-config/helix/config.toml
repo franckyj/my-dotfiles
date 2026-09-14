@@ -1,4 +1,4 @@
-theme = "omarchy"
+# theme = "omarchy"
 
 [editor]
 # show currently open buffers, only when more than one exists.
@@ -62,7 +62,7 @@ space = "·"
 nbsp = "⍽"
 nnbsp = "␣"
 tab = "→"
-newline = "⏎"
+# newline = "⏎"
 tabpad = "·" # Tabs will look like "→···" (depending on tab width)
 
 [editor.inline-diagnostics]
