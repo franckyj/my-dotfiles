@@ -110,6 +110,7 @@ export ATUIN_CONFIG_DIR="/home/zibbble/.config/atuin"
 
 export XDG_CONFIG_HOME="/home/zibbble/.config"
 
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
 xdg-mime default thunar.desktop inode/directory
 
 eval "$(zoxide init zsh)"

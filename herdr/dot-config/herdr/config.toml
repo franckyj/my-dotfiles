@@ -7,9 +7,27 @@ onboarding = false
 name = "terminal"
 
 [theme.custom]
+accent = "#b3a798"
+panel_bg = "reset"
+sidebar_bg = "reset"
+active_row_bg = "#322e2a"
+selection_bg = "#3d3934"
+surface0 = "#322e2a"
+surface1 = "#3d3934"
+surface_dim = "#161513"
+overlay0 = "#6c6964"
+overlay1 = "#b5b3b0"
+text = "#f3f2f2"
+subtext0 = "#b5b3b0"
+mauve = "#c9c0b6"
+green = "#b3a798"
+yellow = "#a8a491"
+red = "#da604f"
+blue = "#a5a693"
+teal = "#c7c4b8"
+peach = "#daa54f"
 # The active tab is drawn as panel_bg text on an accent background, so panel_bg
 # has to be dark for it to read - same colors as status-left's "#[fg=black,bg=blue]"
-panel_bg = "black"
 
 [terminal]
 # Matches -c "#{pane_current_path}" on every split, window, and session

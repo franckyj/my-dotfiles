@@ -137,6 +137,7 @@ update_system() {
     )
 
     install_packages "${packages[@]}"
+    sudo noctalia-greeter passwordless-sync enable zibbble
 }
 
 
@@ -226,6 +227,9 @@ install_hyprland() {
         wireplumber                       # PipeWire session/policy manager
         playerctl                         # MPRIS media player controller
         pavucontrol                       # GUI audio mixer
+        adw-gtk3                          # GTK theme used by Noctalia
+        nwg-look                          # GTK theme configuration tool
+        qt6ct                             # Qt 6 theme configuration tool
         qt5-qtwayland                     # Qt 5 Wayland platform support
         qt6-qtwayland                     # Qt 6 Wayland platform support
     )
@@ -516,6 +520,7 @@ install_noctalia_greeter() {
     )
 
     install_packages "${packages[@]}"
+    sudo noctalia-greeter passwordless-sync enable zibbble
 }
 
 
@@ -728,6 +733,7 @@ main() {
     install_brave
     install_fonts
     install_noctalia
+    install_noctalia_greeter
     install_herdr
 
     configure_flatpak
