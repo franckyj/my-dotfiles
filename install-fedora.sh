@@ -137,7 +137,6 @@ update_system() {
     )
 
     install_packages "${packages[@]}"
-    sudo noctalia-greeter passwordless-sync enable zibbble
 }
 
 
@@ -520,6 +519,8 @@ install_noctalia_greeter() {
     )
 
     install_packages "${packages[@]}"
+    
+    sudo cp "$DOTFILES_DIR/noctalia/dot-config/noctalia/greeter.toml" /var/lib/noctalia-greeter
     sudo noctalia-greeter passwordless-sync enable zibbble
 }
 

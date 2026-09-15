@@ -1,0 +1,20 @@
+[session]
+# Session Name from `noctalia-greeter sessions` (picker label, not .desktop id).
+default = "Hyprland (uwsm-managed)"
+
+[user]
+# Opens the password step for this account on startup.
+default = "zibbble"
+
+[appearance]
+# Password mask: "default" (filled circles) or "random" (cycled glyph shapes).
+password_style = "random"
+# Hide the Noctalia brand logo on the login screen.
+hide_logo = true
+scheme_selector_position = "hidden"
+
+[auth]
+# Allow empty password submit (fprintd / smartcard PAM). Default false.
+allow_empty_password = false
+# Seconds to wait for each greetd reply (0-3600). 0 disables the watchdog.
+request_timeout = 60
