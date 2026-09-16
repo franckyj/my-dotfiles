@@ -226,7 +226,7 @@ install_hyprland() {
         wireplumber                       # PipeWire session/policy manager
         playerctl                         # MPRIS media player controller
         pavucontrol                       # GUI audio mixer
-        adw-gtk3                          # GTK theme used by Noctalia
+        adw-gtk3-theme                    # GTK theme used by Noctalia
         nwg-look                          # GTK theme configuration tool
         qt6ct                             # Qt 6 theme configuration tool
         qt5-qtwayland                     # Qt 5 Wayland platform support
@@ -478,7 +478,7 @@ install_brave() {
     )
 
     for repository in "${repositories[@]}"; do
-        sudo dnf config-manager addrepo --from-repofile="$repository"
+        sudo dnf config-manager addrepo --from-repofile="$repository" --overwrite
     done
 
     local keys=(
@@ -511,7 +511,13 @@ install_noctalia() {
 install_noctalia_greeter() {
     msg "Installing Noctalia Greeter"
 
-    sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+    local repositories=(
+        "https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo" # Terra DNF repository
+    )
+
+    for repository in "${repositories[@]}"; do
+        sudo dnf config-manager addrepo --from-repofile="$repository" --overwrite
+    done
 
     local packages=(
         greetd
@@ -547,8 +553,12 @@ install_fonts() {
 
     local packages=(
         jetbrains-mono-fonts               # Monospaced programming font
+        jetbrainsmono-nerd-fonts           # JetBrains Mono Nerd Font for programming
         cascadia-code-fonts                # Microsoft's programming font
+        cascadia-mono-nf-fonts             # Cascadia Mono Nerd Font for programming
         fira-code-fonts                    # Programming font with ligatures
+        firacode-nerd-fonts                # Fira Code Nerd Font for programming
+        firamono-nerd-fonts                # Fira Mono Nerd Font for programming
         google-noto-sans-fonts             # General-purpose sans-serif font
         google-noto-serif-fonts            # General-purpose serif font
         google-noto-emoji-fonts            # Unicode emoji font
