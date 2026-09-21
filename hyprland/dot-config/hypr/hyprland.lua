@@ -1,0 +1,11 @@
+require("config.helpers")
+require("config.env")
+require("config.monitors")
+require("config.autostart")
+require("config.looknfeel")
+require("config.input")
+require("config.workspaces")
+require("config.binds")
+require("config.rules")
+-- For Noctalia Color templates
+require("noctalia").apply_theme()

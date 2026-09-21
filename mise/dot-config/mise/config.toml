@@ -1,0 +1,6 @@
+[tools]
+codex = "latest"
+dotnet = [ "8", "9", "latest" ]
+gh = "latest"
+node = "26.7.0"
+pi = "latest"
