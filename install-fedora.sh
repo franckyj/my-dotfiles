@@ -56,7 +56,7 @@ success() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 install_packages() {
-    sudo dnf install -y "$@"
+    sudo dnf install -y "$@" --allowerasing
 }
 
 install_flatpak() {
@@ -259,13 +259,13 @@ install_multimedia() {
 
     install_packages "${packages[@]}"
 
-    sudo dnf4 group install -y multimedia
+    sudo dnf4 group install -y multimedia --allowerasing
 
     sudo dnf4 update @multimedia \
         --setopt="install_weak_deps=False" \
         --exclude=PackageKit-gstreamer-plugin
 
-    sudo dnf group install -y sound-and-video
+    sudo dnf group install -y sound-and-video --allowerasing
 
     sudo dnf swap ffmpeg-free ffmpeg --allowerasing
 }
@@ -496,6 +496,12 @@ install_brave() {
     install_packages "${packages[@]}"
 }
 
+enable_terra_repo() {
+    msg "Enabling Terra repo"
+
+    sudo dnf config-manager addrepo --from-repofile="https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo" --overwrite
+}
+
 
 install_noctalia() {
 :    msg "installing Noctalia"
@@ -511,23 +517,29 @@ install_noctalia() {
 install_noctalia_greeter() {
     msg "Installing Noctalia Greeter"
 
-    local repositories=(
-        "https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo" # Terra DNF repository
-    )
-
-    for repository in "${repositories[@]}"; do
-        sudo dnf config-manager addrepo --from-repofile="$repository" --overwrite
-    done
-
     local packages=(
         greetd
         noctalia-greeter
     )
 
     install_packages "${packages[@]}"
-    
-    sudo cp "$DOTFILES_DIR/noctalia/dot-config/noctalia/greeter.toml" /var/lib/noctalia-greeter
+
+    if [[ ! -d /var/lib/noctalia-greeter ]]; then
+        sudo mkdir /var/lib/noctalia-greeter
+    fi
+
+    sudo cp "$DOTFILES_DIR/noctalia/dot-config/noctalia/greeter.toml" /var/lib/noctalia-greeter/greeter.toml
     sudo noctalia-greeter passwordless-sync enable zibbble
+
+    msg "Creating the greeter user"
+
+    sudo groupadd -r greeter || true
+    sudo useradd -r -g greeter -d /var/lib/noctalia-greeter -s /sbin/nologin -c "greetd user for noctalia-greeter" greeter || true
+    sudo install -d -m 0750 -o greeter -g greeter /var/lib/noctalia-greeter || true
+
+    msg "Enabling greetd (next reboot)"
+
+    sudo systemctl enable greetd
 }
 
 
@@ -652,6 +664,15 @@ install_dotfiles() {
         zsh                               # Zsh configuration
     )
 
+    # remove the .zsh file if it's already there
+    if [[ -e /home/zibbble/.zshrc ]]; then
+        if [[ -e /home/zibbble/.zshrc.backup ]]; then
+            rm /home/zibbble/.zshrc.backup
+        fi
+
+        mv /home/zibbble/.zshrc /home/zibbble/.zshrc.backup
+    fi
+
     for package in "${stow_packages[@]}"; do
         stow \
             -d "$DOTFILES_DIR" \
@@ -736,6 +757,7 @@ main() {
 
     enable_yazi_copr
     enable_mise_copr
+    enable_terra_repo
     install_development_tools
     install_lazygit
 

@@ -123,18 +123,21 @@ wallpaper_scheme = "muted"
     builtin_ids = [ "btop", "foot", "gtk3", "gtk4", "helix", "hyprland", "kcolorscheme", "qt", "starship" ]
     community_ids = [ "pi-agent", "brave", "discord", "vscode", "zed", "steam", "bat", "herdr", "lazygit", "yazi" ]
 
-[wallpaper.automation]
-enabled = true
-interval_seconds = 300
+[wallpaper]
+path = "/home/zibbble/Pictures/Wallpapers"
 
-[wallpaper.default]
-path = "/home/zibbble/Pictures/Wallpapers/dark-waves.jpg"
+    [wallpaper.automation]
+    enabled = true
+    interval_seconds = 300
 
-[wallpaper.last]
-path = "/home/zibbble/Pictures/Wallpapers/dark-waves.jpg"
+    [wallpaper.default]
+    path = "/home/zibbble/Pictures/Wallpapers/dark-waves.jpg"
 
-[wallpaper.monitors.LVDS-1]
-path = "/home/zibbble/Pictures/Wallpapers/dark-waves.jpg"
+    [wallpaper.last]
+    path = "/home/zibbble/Pictures/Wallpapers/dark-waves.jpg"
+
+    [wallpaper.monitors.LVDS-1]
+    path = "/home/zibbble/Pictures/Wallpapers/dark-waves.jpg"
 
 [widget.media]
 enabled = false
