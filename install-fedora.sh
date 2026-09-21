@@ -726,6 +726,13 @@ enable_graphical_login() {
 }
 
 
+install_wifi_firmware() {
+    msg "Installing the missing WiFi firmware"
+
+    sudo dnf in iwlwifi-mvm-firmware
+}
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
@@ -782,6 +789,8 @@ main() {
 
     enable_ssd_trim
     enable_graphical_login
+
+    install_wifi_firmware
 
     success "──────────────────────────────────────────"
     success " Installation completed successfully!"
