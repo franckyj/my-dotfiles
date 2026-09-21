@@ -124,6 +124,7 @@ wallpaper_scheme = "muted"
     community_ids = [ "pi-agent", "brave", "discord", "vscode", "zed", "steam", "bat", "herdr", "lazygit", "yazi" ]
 
 [wallpaper]
+directory = "/home/zibbble/Pictures/Wallpapers"
 path = "/home/zibbble/Pictures/Wallpapers"
 
     [wallpaper.automation]
@@ -143,6 +144,9 @@ path = "/home/zibbble/Pictures/Wallpapers"
 enabled = false
 
 [widget.workspaces]
+change_color_on_hover = false
+font_weight = 800
 hide_when_empty = false
-label_source = "name"
+label_source = "id"
 max_label_chars = 8
+style = "minimal"
