@@ -733,6 +733,13 @@ install_wifi_firmware() {
 }
 
 
+install_sound_firmware() {
+    msg "Installing the missing sound firmware"
+
+    sudo dnf in alsa-sof-firmware
+}
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
@@ -791,6 +798,7 @@ main() {
     enable_graphical_login
 
     install_wifi_firmware
+    install_sound_firmware
 
     success "──────────────────────────────────────────"
     success " Installation completed successfully!"
