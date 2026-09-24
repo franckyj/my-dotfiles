@@ -74,6 +74,7 @@ o.window({ tag = "terminal*" }, { workspace = "2" })
 o.window({ class = "^brave-youtube.com__(.*)" }, { workspace = "3" })
 o.window({ class = "^brave-x.com__(.*)" }, { workspace = "3" })
 o.window({ class = "^brave-discord.com__(.*)" }, { workspace = "4" })
+o.window({ class = "discord" }, { workspace = "4" })
 o.window("steam", { workspace = "5" })
 
 -- floating windows
