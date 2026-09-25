@@ -321,10 +321,6 @@ install_basic_utilities() {
         p7zip                             # 7-Zip archive support
         p7zip-plugins                     # Additional 7-Zip archive formats
         tar                               # Another zip utility
-        gcc
-        gcc-c++
-        make
-        cmake
     )
 
     install_packages "${packages[@]}"
@@ -406,6 +402,13 @@ install_development_tools() {
         stow                              # Symlink manager for dotfiles
         flatpak                           # Application deployment framework
         direnv                            # Environment variables management
+        gcc
+        gcc-c++
+        make
+        cmake
+        openblas-devel
+        alsa-sof-firmware # put somewhere else
+        # intel-oneapi-toolkit # this needs the PUB key
     )
 
     install_packages "${packages[@]}"
