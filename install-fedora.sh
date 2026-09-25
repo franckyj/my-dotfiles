@@ -321,6 +321,10 @@ install_basic_utilities() {
         p7zip                             # 7-Zip archive support
         p7zip-plugins                     # Additional 7-Zip archive formats
         tar                               # Another zip utility
+        gcc
+        gcc-c++
+        make
+        cmake
     )
 
     install_packages "${packages[@]}"
