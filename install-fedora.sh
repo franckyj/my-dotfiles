@@ -371,6 +371,25 @@ install_atuin() {
 # Development tools
 # ─────────────────────────────────────────────────────────────────────────────
 
+
+install_llama_cpp_deps() (
+    msg "installing llama cpp dependencies"
+
+    local packages=(
+        # intel-oneapi-toolkit # this needs the PUB key
+        glslc # needed for llama cpp vulkan
+        vulkan-loader # also
+        vulkan-loader-devel # also
+        mesa-vulkan-drivers # also
+        libshaderc # also
+        spirv-headers-devel # also
+        vulkan-tools # also
+    )
+
+    install_packages "${packages[@]}"
+}
+
+
 install_development_tools() {
     msg "installing command-line development tools"
 
@@ -408,23 +427,6 @@ install_development_tools() {
         cmake
         openblas-devel
         alsa-sof-firmware # put somewhere else
-    )
-
-    install_packages "${packages[@]}"
-}
-
-install_llama_cpp_deps() (
-    msg "installing llama cpp dependencies"
-
-    local packages=(
-        # intel-oneapi-toolkit # this needs the PUB key
-        glslc # needed for llama cpp vulkan
-        vulkan-loader # also
-        vulkan-loader-devel # also
-        mesa-vulkan-drivers # also
-        libshaderc # also
-        spirv-headers-devel # also
-        vulkan-tools # also
     )
 
     install_packages "${packages[@]}"

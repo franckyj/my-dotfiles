@@ -47,22 +47,22 @@ render = true
 character = "╎" # Some characters that work well: "▏", "┆", "┊", "⸽"
 skip-levels = 1
 
-[editor.whitespace]
-render = "all"
+#[editor.whitespace]
+#render = "all"
 # or control each character
-#[editor.whitespace.render]
+[editor.whitespace.render]
 space = "all"
 tab = "all"
 nbsp = "all"
 nnbsp = "all"
-newline = "all"
+newline = "none"
 
 [editor.whitespace.characters]
 space = "·"
 nbsp = "⍽"
 nnbsp = "␣"
 tab = "→"
-# newline = "⏎"
+newline = "⏎"
 tabpad = "·" # Tabs will look like "→···" (depending on tab width)
 
 [editor.inline-diagnostics]
