@@ -408,7 +408,23 @@ install_development_tools() {
         cmake
         openblas-devel
         alsa-sof-firmware # put somewhere else
+    )
+
+    install_packages "${packages[@]}"
+}
+
+install_llama_cpp_deps() (
+    msg "installing llama cpp dependencies"
+
+    local packages=(
         # intel-oneapi-toolkit # this needs the PUB key
+        glslc # needed for llama cpp vulkan
+        vulkan-loader # also
+        vulkan-loader-devel # also
+        mesa-vulkan-drivers # also
+        libshaderc # also
+        spirv-headers-devel # also
+        vulkan-tools # also
     )
 
     install_packages "${packages[@]}"
@@ -779,6 +795,7 @@ main() {
     enable_yazi_copr
     enable_mise_copr
     enable_terra_repo
+    install_llama_cpp_deps
     install_development_tools
     install_lazygit
 

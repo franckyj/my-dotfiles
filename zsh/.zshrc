@@ -116,3 +116,5 @@ xdg-mime default thunar.desktop inode/directory
 eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 eval "$(direnv hook zsh)"
+# Added by LM Studio CLI tool (lms)
+export PATH="$PATH:/home/zibbble/.lmstudio/bin"
