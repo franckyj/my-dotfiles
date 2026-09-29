@@ -75,8 +75,8 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize())
 
 -- Special workspace (scratchpad)
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.window.move({ workspace = "special" }))
-hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())
+--hl.bind(mainMod .. " + SHIFT + M", hl.dsp.window.move({ workspace = "special" }))
+--hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())
 
 --------------------
 ---- WORKSPACES ----
