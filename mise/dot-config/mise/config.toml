@@ -1,6 +1,24 @@
 [tools]
-codex = "latest"
-dotnet = [ "8", "9", "latest" ]
-gh = "latest"
+# codex = "latest"
+dotnet = ["8", "9", "10", "latest"]
+gh = "latest" # gitHub CLI
+lazygit = "latest"
 node = "26.7.0"
 pi = "latest"
+eza = "latest" # modern replacement for ls
+bat = "latest" # cat with syntax highlighting and paging
+ripgrep = "latest" # fast replacement for grep
+zoxide = "latest" # smarter replacement for cd
+fzf = "latest" # interactive fuzzy finder
+btop = "latest" # interactive resource monitor
+delta = "latest" # syntax-highlighted Git diff viewer
+jq = "latest" # JSON command-line processor
+yq = "latest" # YAML/JSON/XML command-line processor
+helix = "latest" # modal terminal text editor
+herdr = "latest"
+lua = "latest" # lua runtime for Hyprland config validation
+yazi = "latest" # terminal file manager
+direnv = "latest"
+make = "latest"
+cmake = "latest"
+atuin = "latest"

@@ -4,4 +4,6 @@
 -- Or execute your favorite apps at launch like this:
 hl.on("hyprland.start", function()
     hl.exec_cmd("noctalia")
+    hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 24")
+	-- hl.exec_cmd("systemctl --user start hyprpolkitagent")
 end)

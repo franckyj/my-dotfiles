@@ -20,7 +20,6 @@ hl.bind(mainMod .. " + F",           hl.dsp.window.fullscreen({ mode = "fullscre
 hl.bind(mainMod .. " + ALT + F",     hl.dsp.window.fullscreen({ mode = "maximized" }))
 hl.bind(mainMod .. " + M",           hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + SHIFT + X",   hl.dsp.exec_cmd(noctCall .. "session lock"))
-hl.bind(mainMod .. " + SHIFT + C",   hl.dsp.exec_cmd(noctCall .. "panel-toggle session"))
 
 -- Change focus
 hl.bind(mainMod .. " + Left",  hl.dsp.focus({ direction = "left" }))
@@ -47,14 +46,6 @@ hl.bind(mainMod .. " + CONTROL + SHIFT + Left",  hl.dsp.window.move({ workspace 
 -- hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "r-1" }))
 -- hl.bind(mainMod .. " + CONTROL + Down",        hl.dsp.focus({ workspace = "empty" }))
 
--- Cycle workspaces
-hl.bind(mainMod .. " + bracketleft",  hl.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + bracketright", hl.dsp.focus({ workspace = "e+1" }))
-
--- Scroll through workspaces
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }), { mouse = true })
-hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }), { mouse = true })
-
 -- Resize (super+alt+h/j/k/l)
 hl.bind(mainMod .. " + ALT + H", hl.dsp.exec_cmd("hyprctl dispatch resizeactive -20 0"), { repeating = true })
 hl.bind(mainMod .. " + ALT + J", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 20"), { repeating = true })
@@ -66,9 +57,6 @@ hl.bind(mainMod .. " + ALT + L", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 
 -- hl.bind(mainMod .. " + SHIFT + down",  hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 20"), { repeating = true })
 -- hl.bind(mainMod .. " + SHIFT + up",    hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 -20"), { repeating = true })
 -- hl.bind(mainMod .. " + SHIFT + right", hl.dsp.exec_cmd("hyprctl dispatch moveactive 20 0"), { repeating = true })
-
--- Focus last workspace
-hl.bind(mainMod .. " + Tab", hl.dsp.focus({ workspace = "previous" }))
 
 -- Move & Resize with mouse
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())
@@ -82,12 +70,24 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize())
 ---- WORKSPACES ----
 --------------------
 
+-- Focus workspaces by number (1-9, 0)
 for i = 1, 10 do
     local key = i % 10
     hl.bind(mainMod .. " + " .. key,         hl.dsp.focus({ workspace = i }))
     hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i, follow = true }))
     hl.bind(mainMod .. " + ALT + " .. key,   hl.dsp.window.move({ workspace = i, follow = false }))
 end
+
+-- Cycle workspaces (previous/next)
+hl.bind(mainMod .. " + bracketleft",  hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + bracketright", hl.dsp.focus({ workspace = "e+1" }))
+
+-- Scroll through workspaces
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }), { mouse = true })
+hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }), { mouse = true })
+
+-- Focus last workspace
+hl.bind(mainMod .. " + Tab", hl.dsp.focus({ workspace = "previous" }))
 
 ------------------
 ---- LAUNCHER ----
@@ -99,10 +99,6 @@ hl.bind(mainMod .. " + T",          hl.dsp.exec_cmd(launchPrefix .. EDITOR))
 -- hl.bind(mainMod .. " + C",          hl.dsp.exec_cmd(launchPrefix .. CALCULATOR))
 hl.bind(mainMod .. " + W",          hl.dsp.exec_cmd(launchPrefix .. BROWSER))
 hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"))
-hl.bind(mainMod .. " + Z",          hl.dsp.exec_cmd(noctCall .. "settings-toggle"))
-hl.bind(mainMod .. " + X",          hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center"))
-hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"))
-hl.bind(mainMod .. " + period",     hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher /emo"))
 
 ---------------------------
 ---- HARDWARE CONTROLS ----
@@ -110,19 +106,41 @@ hl.bind(mainMod .. " + period",     hl.dsp.exec_cmd(noctCall .. "panel-toggle la
 
 -- Audio
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(noctCall .. "volume-up"),   { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(noctCall .. "volume-down"),   { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(noctCall .. "volume-down"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(noctCall .. "volume-mute"), { locked = true, repeating = true })
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd(noctCall .. "mic-mute"),  { locked = true, repeating = true })
+hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd(noctCall .. "mic-mute"),    { locked = true, repeating = true })
 
 -- Media
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd(noctCall .. "media toggle"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd(noctCall .. "media toggle"), { locked = true })
-hl.bind("XF86AudioNext",  hl.dsp.exec_cmd(noctCall .. "media next"),      { locked = true })
-hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd(noctCall .. "media previous"),  { locked = true })
+hl.bind("XF86AudioNext",  hl.dsp.exec_cmd(noctCall .. "media next"),   { locked = true })
+hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd(noctCall .. "media previous"), { locked = true })
 
 -- Brightness
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd(noctCall .. "brightness-up"), { repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down"), { repeating = true })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd(noctCall .. "brightness-up"),     { repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down"),   { repeating = true })
+
+------------------
+---- PANELS ----
+------------------
+
+-- Control Center
+hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd(noctCall .. "panel-toggle session"))
+hl.bind(mainMod .. " + X",         hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center"))
+hl.bind(mainMod .. " + A",         hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center notifications"))
+
+-- Launcher
+hl.bind(mainMod .. " + Space",     hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"))
+hl.bind(mainMod .. " + period",    hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher /emo"))
+
+-- Clipboard
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(noctCall .. "panel-toggle clipboard"))
+
+-- Wallpaper
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"))
+
+-- Settings
+hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(noctCall .. "settings-toggle"))
 
 -------------------
 ---- UTILITIES ----
@@ -133,14 +151,7 @@ hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(noctCall .. "screenshot-regio
 hl.bind("Print",                   hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"))
 hl.bind(mainMod .. " + Print",     hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen pick"))
 
--- Theming and Wallpaper
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"))
-
--- Clipboard
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(noctCall .. "panel-toggle clipboard"))
-
 -----------------------
 ---- NOTIFICATIONS ----
 -----------------------
-
-hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center notifications"))
+-- Note: Notifications are accessed via SUPER + A (see Panel section above)

@@ -183,17 +183,6 @@ enable_hyprland_copr() {
 }
 
 
-enable_yazi_copr() {
-    msg "enabling Yazi COPR"
-
-    local coprs=(
-        lihaohong/yazi                  # Yazi COPR repository
-    )
-
-    enable_coprs "${coprs[@]}"
-}
-
-
 enable_mise_copr() {
     msg "enabling Mise COPR"
 
@@ -356,17 +345,6 @@ install_starship() {
 }
 
 
-install_atuin() {
-    msg "installing Atuin"
-
-    curl \
-        --proto '=https' \
-        --tlsv1.2 \
-        -LsSf https://setup.atuin.sh \
-        | sh
-}
-
-
 # ─────────────────────────────────────────────────────────────────────────────
 # Development tools
 # ─────────────────────────────────────────────────────────────────────────────
@@ -394,56 +372,14 @@ install_development_tools() {
     msg "installing command-line development tools"
 
     local packages=(
-        eza                               # Modern replacement for ls
-        bat                               # cat with syntax highlighting and paging
-        ripgrep                           # Fast replacement for grep
-        fd-find                           # Fast replacement for find
-        zoxide                            # Smarter replacement for cd
-        fzf                               # Interactive fuzzy finder
-        btop                              # Interactive resource monitor
-        htop                              # Interactive process viewer
-        iotop-c                           # Monitor disk I/O by process
-        nvtop                             # GPU monitoring tool
-        du-dust                           # Modern replacement for du
         duf                               # Modern replacement for df
-        ncdu                              # Interactive disk usage analyzer
-        fastfetch                         # System information display
-        git-delta                         # Syntax-highlighted Git diff viewer
-        jq                                # JSON command-line processor
-        yq                                # YAML/JSON/XML command-line processor
-        gh                                # GitHub CLI
-        tldr                              # Simplified command-line documentation
-        neovim                            # Vim-based text editor
-        helix                             # Modal terminal text editor
-        lua                               # Lua runtime for Hyprland config validation
-        yazi                              # Terminal file manager
         mise                              # Development tool/version manager
         stow                              # Symlink manager for dotfiles
         flatpak                           # Application deployment framework
-        direnv                            # Environment variables management
         gcc
         gcc-c++
-        make
-        cmake
         openblas-devel
         alsa-sof-firmware # put somewhere else
-    )
-
-    install_packages "${packages[@]}"
-}
-
-
-install_lazygit() {
-    msg "installing Lazygit"
-
-    local coprs=(
-        atim/lazygit                       # Lazygit COPR repository
-    )
-
-    enable_coprs "${coprs[@]}"
-
-    local packages=(
-        lazygit                            # Terminal UI for Git
     )
 
     install_packages "${packages[@]}"
@@ -568,16 +504,30 @@ install_noctalia_greeter() {
 }
 
 
-install_herdr() {
-    msg "installing Herdr"
+install_pi_coding_agent_config() {
+    msg "installing pi-local-models extension"
 
-    local installers=(
-        "https://herdr.dev/install.sh"     # Herdr installation script
+    pi install npm:pi-local-models
+
+    msg "creating local-models.json for llama-cpp server"
+    mkdir -p "$HOME/.pi/agent"
+    cat > "$HOME/.pi/agent/local-models.json" <<EOF
+{
+    "url": "http://127.0.0.1:8080",
+    "apiKey": "1234"
+}
+EOF
+}
+
+
+install_zed_editor() {
+    msg "installing zed editor"
+
+    local packages=(
+        zed
     )
 
-    for installer in "${installers[@]}"; do
-        curl -fsSL "$installer" | sh
-    done
+    install_packages "${packages[@]}"
 }
 
 
@@ -687,6 +637,7 @@ install_dotfiles() {
         noctalia                          # Noctalia configuration
         starship                          # Starship prompt configuration
         zsh                               # Zsh configuration
+        zed                               # Modern editor
     )
 
     # remove the .zsh file if it's already there
@@ -730,6 +681,17 @@ install_wallpapers() {
             https://github.com/mylinuxforwork/wallpaper.git \
             "$wallpapers"
     fi
+}
+
+
+install_cursor_themes() {
+    msg "installing cursor themes"
+
+    local packages=(
+        bibata-cursor-theme
+    )
+
+    install_packages "${packages[@]}"
 }
 
 
@@ -792,14 +754,11 @@ main() {
 
     install_shell
     install_starship
-    install_atuin
 
-    enable_yazi_copr
     enable_mise_copr
     enable_terra_repo
     install_llama_cpp_deps
     install_development_tools
-    install_lazygit
 
     install_foot
     install_thunar
@@ -807,10 +766,6 @@ main() {
     install_fonts
     install_noctalia
     install_noctalia_greeter
-    install_herdr
-
-    configure_flatpak
-    install_flatpak_apps
 
     checkout_dotfiles
     make_scripts_executable
@@ -818,7 +773,14 @@ main() {
 
     install_development_runtimes
 
+    configure_flatpak
+    install_flatpak_apps
+
+    install_pi_coding_agent_config
+    install_zed_editor
+
     install_wallpapers
+    install_cursor_themes
 
     enable_ssd_trim
     enable_graphical_login
