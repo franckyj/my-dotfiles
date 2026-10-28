@@ -406,6 +406,17 @@ install_development_runtimes() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dotnetup tool
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_dotnetup() {
+    msg "installing dotnetup"
+
+    curl -fsSL https://aka.ms/dotnetup/get-dotnetup.sh | bash
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Applications
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -754,6 +765,7 @@ main() {
 
     install_shell
     install_starship
+    install_dotnetup
 
     enable_mise_copr
     enable_terra_repo

@@ -129,3 +129,6 @@ export PATH="/home/zibbble/.local/bin:$PATH"
 
 # dotnet
 export PATH="/home/zibbble/.dotnet/tools:$PATH"
+
+# dotnetup
+export PATH="/home/zibbble/.dotnetup:$PATH"
