@@ -113,10 +113,10 @@ export XDG_CONFIG_HOME="/home/zibbble/.config"
 gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
 xdg-mime default thunar.desktop inode/directory
 
+eval "$(mise activate zsh)"
 eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 eval "$(direnv hook zsh)"
-eval "$(mise activate zsh)"
 
 # Added by LM Studio CLI tool (lms)
 export PATH="$PATH:/home/zibbble/.lmstudio/bin"

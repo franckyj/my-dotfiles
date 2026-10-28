@@ -350,7 +350,7 @@ install_starship() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-install_llama_cpp_deps() (
+install_llama_cpp_deps() {
     msg "installing llama cpp dependencies"
 
     local packages=(
@@ -757,7 +757,7 @@ main() {
 
     enable_mise_copr
     enable_terra_repo
-    install_llama_cpp_deps
+    # install_llama_cpp_deps
     install_development_tools
 
     install_foot

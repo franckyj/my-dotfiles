@@ -13,7 +13,7 @@ order = [ "default" ]
     [bar.default]
     background_opacity = 0.75
     capsule = false
-    capsule_fill = "outline"
+    capsule_fill = "outline_variant"
     center = [ "clock" ]
     color = "tertiary"
     end = [
@@ -29,6 +29,7 @@ order = [ "default" ]
         "control-center",
         "session"
     ]
+    font_family = "Liberation Mono"
     font_weight = 700
     icon_color = "secondary"
     margin_edge = 0
@@ -82,7 +83,7 @@ widget_order = [ "lockscreen-login-box@eDP-1", "lockscreen-login-box" ]
     type = "login_box"
 
         [lockscreen_widgets.widget.lockscreen-login-box.settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -109,7 +110,7 @@ widget_order = [ "lockscreen-login-box@eDP-1", "lockscreen-login-box" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -150,15 +151,15 @@ polkit_agent = true
     wallpaper_placement = "floating"
 
 [theme]
-builtin = "Dracula"
-community_palette = "Solarized"
+builtin = "Catppuccin"
+community_palette = "Catppuccin Mocha Blue"
 mode = "dark"
 pure_black_dark = false
-source = "builtin"
+source = "community"
 wallpaper_scheme = "muted"
 
     [theme.templates]
-    builtin_ids = [ "gtk3", "kcolorscheme", "qt" ]
+    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "qt" ]
     community_ids = []
 
 [user]
@@ -171,6 +172,15 @@ path = "/home/zibbble/Pictures/Wallpapers"
     [wallpaper.automation]
     enabled = true
     interval_seconds = 3000
+
+    [wallpaper.default]
+    path = "/home/zibbble/Pictures/Wallpapers/the-sphere.png"
+
+    [wallpaper.last]
+    path = "/home/zibbble/Pictures/Wallpapers/the-sphere.png"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/home/zibbble/Pictures/Wallpapers/the-sphere.png"
 
 [widget.media]
 enabled = false

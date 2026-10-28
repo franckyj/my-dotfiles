@@ -1,6 +1,6 @@
 [tools]
 # codex = "latest"
-dotnet = ["8", "9", "10", "latest"]
+# dotnet = ["8", "9", "10", "latest"]
 gh = "latest" # gitHub CLI
 lazygit = "latest"
 node = "26.7.0"
