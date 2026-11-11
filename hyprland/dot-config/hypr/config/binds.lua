@@ -12,6 +12,7 @@ local launchPrefix  = "uwsm app -- " -- if you are not using UWSM, make this emp
 ---------------------------
 ---- WINDOW MANAGEMENT ----
 ---------------------------
+-- right => Right
 
 hl.bind(mainMod .. " + Escape",      hl.dsp.exec_cmd("hyprctl kill"))
 hl.bind(mainMod .. " + Q",           hl.dsp.window.close())
@@ -22,10 +23,10 @@ hl.bind(mainMod .. " + ALT + F",     hl.dsp.window.fullscreen({ mode = "maximize
 hl.bind(mainMod .. " + SHIFT + X",   hl.dsp.exec_cmd(noctCall .. "session lock"))
 
 -- Change focus
-hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + Left",  hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + Right", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + Up",    hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + Down",  hl.dsp.focus({ direction = "down" }))
 -- Focus (vim-style)
 hl.bind(mainMod .. " + h", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + j", hl.dsp.focus({ direction = "down" }))
@@ -35,30 +36,30 @@ hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "right" }))
 hl.bind("ALT + Tab",           hl.dsp.window.cycle_next())
 
 -- Move active window around current workspace
-hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "r" }))
-hl.bind(mainMod .. " + SHIFT + left",  hl.dsp.window.move({ direction = "l" }))
-hl.bind(mainMod .. " + SHIFT + up",    hl.dsp.window.move({ direction = "u" }))
-hl.bind(mainMod .. " + SHIFT + down",  hl.dsp.window.move({ direction = "d" }))
-hl.bind(mainMod .. " + CONTROL + SHIFT + right", hl.dsp.window.move({ workspace = "r+1" }))
-hl.bind(mainMod .. " + CONTROL + SHIFT + left",  hl.dsp.window.move({ workspace = "r-1" }))
+hl.bind(mainMod .. " + SHIFT + Right", hl.dsp.window.move({ direction = "r" }))
+hl.bind(mainMod .. " + SHIFT + Left",  hl.dsp.window.move({ direction = "l" }))
+hl.bind(mainMod .. " + SHIFT + Up",    hl.dsp.window.move({ direction = "u" }))
+hl.bind(mainMod .. " + SHIFT + Down",  hl.dsp.window.move({ direction = "d" }))
+hl.bind(mainMod .. " + CONTROL + SHIFT + Right", hl.dsp.window.move({ workspace = "r+1" }))
+hl.bind(mainMod .. " + CONTROL + SHIFT + Left",  hl.dsp.window.move({ workspace = "r-1" }))
 
--- hl.bind(mainMod .. " + CONTROL + right",       hl.dsp.focus({ workspace = "r+1" }))
--- hl.bind(mainMod .. " + CONTROL + left",        hl.dsp.focus({ workspace = "r-1" }))
--- hl.bind(mainMod .. " + CONTROL + down",        hl.dsp.focus({ workspace = "empty" }))
+-- hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "r+1" }))
+-- hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "r-1" }))
+-- hl.bind(mainMod .. " + CONTROL + Down",        hl.dsp.focus({ workspace = "empty" }))
 
 -- Resize (super+alt+h/j/k/l)
 hl.bind(mainMod .. " + ALT + h", hl.dsp.layout("colresize -conf"), { repeating = true })
 -- hl.bind(mainMod .. " + ALT + j", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 20"), { repeating = true })
 -- hl.bind(mainMod .. " + ALT + k", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 -20"), { repeating = true })
 hl.bind(mainMod .. " + ALT + l", hl.dsp.layout("colresize +conf"), { repeating = true })
-hl.bind(mainMod .. " + ALT + left", hl.dsp.layout("colresize -conf"), { repeating = true })
-hl.bind(mainMod .. " + ALT + right", hl.dsp.layout("colresize +conf"), { repeating = true })
+hl.bind(mainMod .. " + ALT + Left", hl.dsp.layout("colresize -conf"), { repeating = true })
+hl.bind(mainMod .. " + ALT + Right", hl.dsp.layout("colresize +conf"), { repeating = true })
 
 -- -- Move floating window (super+shift+arrows)
--- hl.bind(mainMod .. " + SHIFT + left",  hl.dsp.exec_cmd("hyprctl dispatch moveactive -20 0"), { repeating = true })
--- hl.bind(mainMod .. " + SHIFT + down",  hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 20"), { repeating = true })
--- hl.bind(mainMod .. " + SHIFT + up",    hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 -20"), { repeating = true })
--- hl.bind(mainMod .. " + SHIFT + right", hl.dsp.exec_cmd("hyprctl dispatch moveactive 20 0"), { repeating = true })
+-- hl.bind(mainMod .. " + SHIFT + Left",  hl.dsp.exec_cmd("hyprctl dispatch moveactive -20 0"), { repeating = true })
+-- hl.bind(mainMod .. " + SHIFT + Down",  hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 20"), { repeating = true })
+-- hl.bind(mainMod .. " + SHIFT + Up",    hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 -20"), { repeating = true })
+-- hl.bind(mainMod .. " + SHIFT + Right", hl.dsp.exec_cmd("hyprctl dispatch moveactive 20 0"), { repeating = true })
 
 -- Move & Resize with mouse
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())

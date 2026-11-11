@@ -405,6 +405,17 @@ install_development_runtimes() {
 }
 
 
+install_aspire_cli() {
+    msg "installing Aspire CLI through mise"
+
+    if ! command -v mise >/dev/null 2>&1; then
+        die "mise is not available in PATH"
+    fi
+
+    mise use -g aspire
+}
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Dotnetup tool
 # ─────────────────────────────────────────────────────────────────────────────
@@ -784,6 +795,7 @@ main() {
     install_dotfiles
 
     install_development_runtimes
+    install_aspire_cli
 
     configure_flatpak
     install_flatpak_apps
