@@ -479,6 +479,26 @@ install_brave() {
     install_packages "${packages[@]}"
 }
 
+
+install_docker_engine() {
+    msg "installing Docker Engine from Docker's Fedora repository"
+
+    sudo dnf config-manager addrepo \
+        --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo \
+        --overwrite
+
+    local packages=(
+        docker-ce                  # Docker Engine
+        docker-ce-cli              # Docker command-line interface
+        containerd.io              # Container runtime
+        docker-buildx-plugin       # Docker Buildx
+        docker-compose-plugin      # Docker Compose
+    )
+
+    install_packages "${packages[@]}"
+    sudo systemctl enable --now docker
+}
+
 enable_terra_repo() {
     msg "Enabling Terra repo"
 
@@ -785,6 +805,7 @@ main() {
 
     install_foot
     install_thunar
+    install_docker_engine
     install_brave
     install_fonts
     install_noctalia
